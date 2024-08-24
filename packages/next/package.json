@@ -1,11 +1,9 @@
 {
-  "name": "@xframework/ui",
+  "name": "@xframework/next",
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./button": "./src/button.tsx",
-    "./card": "./src/card.tsx",
-    "./code": "./src/code.tsx"
+    "./index": "./src/index.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
