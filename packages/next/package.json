@@ -2,8 +2,12 @@
   "name": "@xframework/next",
   "version": "0.0.0",
   "private": true,
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "lint": "eslint . --max-warnings 0"
   },
   "devDependencies": {
@@ -12,6 +16,7 @@
     "@xframework/eslint-config": "workspace:*",
     "@xframework/typescript-config": "workspace:*",
     "eslint": "^8.57.0",
+    "tsup": "^8.2.4",
     "typescript": "^5.3.3"
   },
   "dependencies": {
