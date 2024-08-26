@@ -7,8 +7,8 @@ export function X<TModules extends Record<string, Module<unknown, unknown>>>(
   const hono = new Hono().basePath('/x');
 
   const instance = {
-    modules: {} as XInstance<TModules>['modules'],
     _: {
+      modules: {} as XInstance<TModules>['modules'],
       hono,
     }
   } as XInstance<TModules>;

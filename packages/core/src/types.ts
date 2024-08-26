@@ -15,10 +15,10 @@ export type ModuleToInstance<T> = T extends Module<infer Instance, unknown> ? In
 export type XInstance<TModules extends Record<string, Module<unknown, unknown>>> = {
   [K in keyof TModules]: ModuleToInstance<TModules[K]>;
 } & {
-  modules: {
-    [K in keyof TModules]: TModules[K];
-  };
   _: {
+    modules: {
+      [K in keyof TModules]: TModules[K];
+    };
     hono: Hono;
   }
 };
