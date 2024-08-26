@@ -1,6 +1,5 @@
 {
   "name": "next-drizzle",
-  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 4000 --turbo",
