@@ -16,6 +16,9 @@
       "require": "./dist/types.js"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup src/index.ts src/types.ts --format cjs,esm --dts",
     "dev": "tsup src/index.ts src/types.ts --format cjs,esm --dts --watch",
