@@ -1,6 +1,9 @@
+import {type Hono } from 'hono'
+
 export type Module<TInstance, TExtras = {}> = {
   id: string;
   register: () => TInstance;
+  hono?: Hono;
 } & TExtras;
 
 export type XConfig<TModules extends Record<string, Module<unknown, unknown>>> = {
@@ -15,4 +18,5 @@ export type XInstance<TModules extends Record<string, Module<unknown, unknown>>>
   modules: {
     [K in keyof TModules]: TModules[K];
   };
+  hono: Hono;
 };

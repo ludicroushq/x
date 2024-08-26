@@ -7,9 +7,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "./drizzle": {
-      "require": "./dist/drizzle.js",
+      "types": "./dist/drizzle.d.ts",
       "import": "./dist/drizzle.mjs",
-      "types": "./dist/drizzle.d.ts"
+      "require": "./dist/drizzle.js"
     }
   },
   "scripts": {
