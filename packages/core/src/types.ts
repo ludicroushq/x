@@ -18,5 +18,7 @@ export type XInstance<TModules extends Record<string, Module<unknown, unknown>>>
   modules: {
     [K in keyof TModules]: TModules[K];
   };
-  hono: Hono;
+  _: {
+    hono: Hono;
+  }
 };

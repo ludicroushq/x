@@ -8,7 +8,9 @@ export function X<TModules extends Record<string, Module<unknown, unknown>>>(
 
   const instance = {
     modules: {} as XInstance<TModules>['modules'],
-    hono,
+    _: {
+      hono,
+    }
   } as XInstance<TModules>;
 
 

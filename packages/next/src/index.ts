@@ -24,7 +24,7 @@ export function X<TModules extends Record<string, Module<unknown, unknown>>>(
   const createHandlers = (): Handlers => {
     const handlers = {} as Handlers;
     (['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'] as const).forEach((method) => {
-      handlers[method] = handle(coreInstance.hono);
+      handlers[method] = handle(coreInstance._.hono);
     });
     return handlers;
   };
