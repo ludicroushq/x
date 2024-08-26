@@ -1,10 +1,12 @@
 import { X as CoreX } from '@xframework/core';
-import { XConfig, XInstance, Module } from '@xframework/types';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { XConfig, XInstance, Module } from '@xframework/core/types';
+import { NextRequest } from 'next/server'
+import { handle } from 'hono/vercel'
+import { FetchEventLike } from 'hono/types';
 
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS';
 
-type Handler = (req: NextApiRequest, res: NextApiResponse) => Promise<void> | void;
+type Handler = (req: NextRequest, requestContext: FetchEventLike) => Response | Promise<Response>;
 
 type Handlers = {
   [key in HTTPMethod]: Handler;
@@ -22,10 +24,7 @@ export function X<TModules extends Record<string, Module<unknown, unknown>>>(
   const createHandlers = (): Handlers => {
     const handlers = {} as Handlers;
     (['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'] as const).forEach((method) => {
-      handlers[method] = async (req, res) => {
-        // Implement Next.js specific handling logic here
-        res.status(501).json({ message: 'Not implemented' });
-      };
+      handlers[method] = handle(coreInstance.hono);
     });
     return handlers;
   };

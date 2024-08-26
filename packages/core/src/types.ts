@@ -1,4 +1,4 @@
-import {type Hono } from 'hono'
+import type { Hono } from 'hono'
 
 export type Module<TInstance, TExtras = {}> = {
   id: string;

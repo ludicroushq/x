@@ -1,4 +1,4 @@
-import { XConfig, XInstance, Module } from '@xframework/types';
+import { XConfig, XInstance, Module } from './types';
 import { Hono } from 'hono';
 
 export function X<TModules extends Record<string, Module<unknown, unknown>>>(

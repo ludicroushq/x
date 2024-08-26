@@ -6,6 +6,11 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
+    ".": {
+      "main": "./dist/index.js",
+      "module": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
     "./drizzle": {
       "types": "./dist/drizzle.d.ts",
       "import": "./dist/drizzle.mjs",
@@ -24,11 +29,10 @@
     "@xframework/typescript-config": "workspace:*",
     "eslint": "^8.57.0",
     "tsup": "^8.2.4",
-    "typescript": "^5.3.3"
+    "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@xframework/core": "workspace:*",
-    "@xframework/types": "workspace:*"
+    "@xframework/core": "workspace:*"
   },
   "peerDependencies": {
     "drizzle-orm": ">=0.33.0"
