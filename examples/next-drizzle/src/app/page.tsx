@@ -7,7 +7,7 @@ export default async function Home() {
   const totalVisits = await x.db.select({ count: count() }).from(pageLoads)
   return (
     <main>
-      <h1>Hello world</h1>
+      <h1>Hello Drizzle</h1>
       <p>Total visits: {totalVisits[0]?.count}</p>
     </main>
   );

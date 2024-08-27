@@ -17,7 +17,7 @@ export function X<TModules extends Record<string, Module<unknown, unknown>>>(
   Object.entries(config.modules).forEach(([name, module]) => {
     const moduleInstance = module.register();
     (instance as any)[name] = moduleInstance;
-    (instance.modules as any)[name] = Object.assign({}, module);
+    (instance._.modules as any)[name] = Object.assign({}, module);
 
     if (module.hono) {
       hono.route('/', module.hono);
