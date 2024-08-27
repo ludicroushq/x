@@ -1,9 +1,6 @@
 {
   "name": "@xframework/core",
   "version": "0.0.2",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "main": "./dist/index.js",
@@ -16,22 +13,26 @@
       "require": "./dist/types.js"
     }
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "build": "tsup src/index.ts src/types.ts --format cjs,esm --dts",
     "dev": "tsup src/index.ts src/types.ts --format cjs,esm --dts --watch",
-    "lint": "eslint . --max-warnings 0"
+    "lint": "eslint . --fix --max-warnings 0"
+  },
+  "dependencies": {
+    "hono": "^4.5.8"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^2.27.3",
     "@types/eslint": "^8.56.5",
     "@types/node": "^20.11.24",
     "eslint": "^8.57.0",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4"
-  },
-  "dependencies": {
-    "hono": "^4.5.8"
   }
 }

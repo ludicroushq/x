@@ -5,7 +5,7 @@
     "dev": "next dev -p 4000 --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --fix --max-warnings 0"
   },
   "dependencies": {
     "@xframework/db": "workspace:*",
@@ -17,12 +17,11 @@
     "react-dom": "19.0.0-rc-f994737d14-20240522"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^2.27.3",
     "@types/better-sqlite3": "^7.6.11",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@xframework/eslint-config": "workspace:*",
-    "@xframework/typescript-config": "workspace:*",
     "drizzle-kit": "^0.24.1",
     "eslint": "^8",
     "eslint-config-next": "15.0.0-rc.0",

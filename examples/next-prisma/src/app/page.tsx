@@ -1,4 +1,4 @@
-import { x } from "../x";
+import { x } from '../x'
 
 export default async function Home() {
   await x.db.pageLoad.create({})
@@ -6,7 +6,10 @@ export default async function Home() {
   return (
     <main>
       <h1>Hello Prisma</h1>
-      <p>Total visits: {totalVisits}</p>
+      <p>
+        Total visits:
+        {totalVisits}
+      </p>
     </main>
-  );
+  )
 }

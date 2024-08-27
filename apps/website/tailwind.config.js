@@ -1,4 +1,4 @@
-import { createPreset } from 'fumadocs-ui/tailwind-plugin';
+import { createPreset } from 'fumadocs-ui/tailwind-plugin'
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,7 +6,7 @@ module.exports = {
   presets: [createPreset()],
   content: [
     './node_modules/fumadocs-ui/dist/**/*.js',
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {},

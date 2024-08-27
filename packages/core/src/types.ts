@@ -1,16 +1,17 @@
 import type { Hono } from 'hono'
 
+// eslint-disable-next-line ts/no-empty-object-type
 export type Module<TInstance, TExtras = {}> = {
-  id: string;
-  register: () => TInstance;
-  hono?: Hono;
-} & TExtras;
+  id: string
+  register: () => TInstance
+  hono?: Hono
+} & TExtras
 
-export type XConfig<TModules extends Record<string, Module<unknown, unknown>>> = {
-  modules: TModules;
-};
+export interface XConfig<TModules extends Record<string, Module<unknown, unknown>>> {
+  modules: TModules
+}
 
-export type ModuleToInstance<T> = T extends Module<infer Instance, unknown> ? Instance : never;
+export type ModuleToInstance<T> = T extends Module<infer Instance, unknown> ? Instance : never
 
 export type XInstance<TModules extends Record<string, Module<unknown, unknown>>> = {
   [K in keyof TModules]: ModuleToInstance<TModules[K]>;
@@ -18,7 +19,7 @@ export type XInstance<TModules extends Record<string, Module<unknown, unknown>>>
   _: {
     modules: {
       [K in keyof TModules]: TModules[K];
-    };
-    hono: Hono;
+    }
+    hono: Hono
   }
-};
+}
