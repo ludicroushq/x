@@ -25,8 +25,9 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/drizzle.ts src/prisma.ts --format cjs,esm --dts",
-    "dev": "tsup src/index.ts src/drizzle.ts src/prisma.ts --format cjs,esm --dts --watch",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsup src --format cjs,esm --dts",
+    "dev": "tsup src --format cjs,esm --dts --watch",
     "lint": "eslint . --fix --max-warnings 0"
   },
   "peerDependencies": {
