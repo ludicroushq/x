@@ -7,7 +7,7 @@
     "test": "npm run lint && npm run lint",
     "lint": "turbo lint",
     "pretty": "prettier --write .",
-    "publish-packages": "turbo run lint test build && changeset version && changeset publish"
+    "release": "turbo run build --filter '@xframework/*' && changeset publish"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
