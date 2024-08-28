@@ -266,7 +266,7 @@ importers:
         specifier: '>=13.0.0 || ^15.0.0-rc'
         version: 15.0.0-rc.0(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       next-auth:
-        specifier: '>=5.0.0-beta.20'
+        specifier: 5.0.0-beta.20
         version: 5.0.0-beta.20(next@15.0.0-rc.0(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
     devDependencies:
       '@types/node':
