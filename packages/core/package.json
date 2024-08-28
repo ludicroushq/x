@@ -1,28 +1,25 @@
 {
   "name": "@xframework/core",
   "version": "0.0.2",
+  "type": "module",
   "exports": {
     ".": {
-      "main": "./dist/index.js",
-      "module": "./dist/index.mjs",
+      "module": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
     "./types": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/types.mjs",
-      "require": "./dist/types.js"
+      "module": "./dist/types.js",
+      "types": "./dist/types.d.ts"
     }
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "clean": "rm -rf dist",
-    "build": "npm run clean && tsup src --format cjs,esm --dts",
-    "dev": "tsup src --format cjs,esm --dts --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "eslint . --fix --max-warnings 0"
   },
   "dependencies": {
