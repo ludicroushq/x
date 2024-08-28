@@ -30,8 +30,7 @@ export const X = <TModules extends Record<string, Module<unknown, unknown>>>(
   return instance;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const createModule = <TInstance, TExtras, TParams extends any[]>(
+export const createModule = <TInstance, TExtras, TParams extends unknown[]>(
   moduleCreator: (...args: TParams) => Module<TInstance, TExtras>,
 ): ((...args: TParams) => Module<TInstance, TExtras>) => {
   return moduleCreator;

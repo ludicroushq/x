@@ -1,5 +1,5 @@
 {
-  "name": "@xframework/db",
+  "name": "@xframework/auth",
   "version": "0.0.2",
   "type": "module",
   "exports": {
@@ -7,13 +7,9 @@
       "module": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./drizzle": {
-      "module": "./dist/drizzle.js",
-      "types": "./dist/drizzle.d.ts"
-    },
-    "./prisma": {
-      "module": "./dist/prisma.js",
-      "types": "./dist/prisma.d.ts"
+    "./authjs/next": {
+      "module": "./dist/authjs/next.js",
+      "types": "./dist/authjs/next.d.ts"
     }
   },
   "module": "./dist/index.js",
@@ -27,19 +23,20 @@
     "lint": "eslint . --fix --max-warnings 0"
   },
   "peerDependencies": {
-    "@prisma/client": ">=5.0.0",
-    "drizzle-orm": ">=0.33.0"
+    "next-auth": ">=5.0.0-beta.20",
+    "next": ">=13.0.0 || ^15.0.0-rc"
   },
   "peerDependenciesMeta": {
-    "@prisma/client": {
+    "next-auth": {
       "optional": true
     },
-    "drizzle-orm": {
+    "next": {
       "optional": true
     }
   },
   "dependencies": {
-    "@xframework/core": "workspace:*"
+    "@xframework/core": "workspace:*",
+    "hono": "^4.5.8"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
