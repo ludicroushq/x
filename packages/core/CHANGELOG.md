@@ -1,5 +1,11 @@
 # @xframework/core
 
+## 0.0.3
+
+### Patch Changes
+
+- e6575d3: add auth module
+
 ## 0.0.2
 
 ### Patch Changes

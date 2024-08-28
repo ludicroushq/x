@@ -1,6 +1,6 @@
 {
   "name": "@xframework/auth",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "exports": {
     ".": {
@@ -23,7 +23,7 @@
     "lint": "eslint . --fix --max-warnings 0"
   },
   "peerDependencies": {
-    "next-auth": ">=5.0.0-beta.20",
+    "next-auth": ">=undefined",
     "next": ">=13.0.0 || ^15.0.0-rc"
   },
   "peerDependenciesMeta": {
