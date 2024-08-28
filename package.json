@@ -4,9 +4,10 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "test": "npm run lint && npm run lint",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "publish-packages": "turbo run build lint test && changeset version && changeset publish"
+    "pretty": "prettier --write .",
+    "publish-packages": "turbo run lint test build && changeset version && changeset publish"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
