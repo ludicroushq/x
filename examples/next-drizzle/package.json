@@ -17,14 +17,15 @@
     "react-dom": "19.0.0-rc-f994737d14-20240522"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.27.3",
     "@types/better-sqlite3": "^7.6.11",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "drizzle-kit": "^0.24.1",
-    "eslint": "^8",
+    "eslint": "^9.9.1",
     "eslint-config-next": "15.0.0-rc.0",
+    "eslint-config-sheriff": "^21.1.0",
+    "eslint-define-config": "^2.1.0",
     "typescript": "^5.5.4"
   }
 }

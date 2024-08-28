@@ -1,8 +1,8 @@
-import { createDbModule } from './index'
+import { createDbModule } from ".";
 
-export const createDrizzleModule = createDbModule(
-  <T>(db: T) => ({
-    id: 'drizzle',
+export const createDrizzleModule = createDbModule(<T>(db: T) => {
+  return {
+    id: "drizzle",
     register: () => db,
-  }),
-)
+  };
+});

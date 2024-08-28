@@ -1,8 +1,9 @@
-import type { PrismaClient } from '@prisma/client'
-import { createDbModule } from './index'
+import type { PrismaClient } from "@prisma/client";
+import { createDbModule } from ".";
 
-export const createPrismaModule = createDbModule((prisma: PrismaClient) => ({
-  id: 'prisma',
-  register: () => prisma,
-}),
-)
+export const createPrismaModule = createDbModule((prisma: PrismaClient) => {
+  return {
+    id: "prisma",
+    register: () => prisma,
+  };
+});

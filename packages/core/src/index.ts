@@ -1,33 +1,38 @@
-import { Hono } from 'hono'
-import type { Module, XConfig, XInstance } from './types'
+import { Hono } from "hono";
+import type { Module, XConfig, XInstance } from "./types";
 
-export function X<TModules extends Record<string, Module<unknown, unknown>>>(
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const X = <TModules extends Record<string, Module<unknown, unknown>>>(
   config: XConfig<TModules>,
-): XInstance<TModules> {
-  const hono = new Hono().basePath('/x')
+): XInstance<TModules> => {
+  const hono = new Hono().basePath("/x");
 
   const instance = {
     _: {
-      modules: {} as XInstance<TModules>['modules'],
+      modules: {} as XInstance<TModules>["modules"],
       hono,
     },
-  } as XInstance<TModules>
+  } as XInstance<TModules>;
 
   Object.entries(config.modules).forEach(([name, module]) => {
     const moduleInstance = module.register();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
     (instance as any)[name] = moduleInstance;
-    (instance._.modules as any)[name] = Object.assign({}, module)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+    (instance._.modules as any)[name] = { ...module };
 
     if (module.hono) {
-      hono.route('/', module.hono)
+      hono.route("/", module.hono);
     }
-  })
+  });
 
-  return instance
-}
+  return instance;
+};
 
-export function createModule<TInstance, TExtras, TParams extends any[]>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const createModule = <TInstance, TExtras, TParams extends any[]>(
   moduleCreator: (...args: TParams) => Module<TInstance, TExtras>,
-) {
-  return moduleCreator
-}
+): ((...args: TParams) => Module<TInstance, TExtras>) => {
+  return moduleCreator;
+};

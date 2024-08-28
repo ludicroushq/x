@@ -7,10 +7,10 @@ It is a lightweight **un-opinionated** framework of pluggable modules, allowing 
 ## Example
 
 ```ts
-import { X } from '@xframework/next'
-import { createDrizzleModule } from '@xframework/db/drizzle'
-import { createAuthJsModule } from '@xframework/auth/auth-js/next'
-import { createStripeModule } from '@xframework/payment/stripe'
+import { X } from "@xframework/next";
+import { createDrizzleModule } from "@xframework/db/drizzle";
+import { createAuthJsModule } from "@xframework/auth/auth-js/next";
+import { createStripeModule } from "@xframework/payment/stripe";
 
 export const x = X({
   modules: {
@@ -21,17 +21,19 @@ export const x = X({
       webhooks: {
         onCustomerCreated() {
           // ...
-        }
-      }
+        },
+      },
     }),
     // ... and more ...
-  }
-})
+  },
+});
 
 // Usage
-const users = x.db.select().from(users)
-const currentUser = await x.auth()
-const customer = await x.stripe.client.customers.retrieve(currentUser.customerId)
+const users = x.db.select().from(users);
+const currentUser = await x.auth();
+const customer = await x.stripe.client.customers.retrieve(
+  currentUser.customerId,
+);
 ```
 
 ## Getting Started

@@ -1,8 +1,8 @@
-import { x } from '../x'
+import { x } from "../x";
 
 export default async function Home() {
-  await x.db.pageLoad.create({})
-  const totalVisits = await x.db.pageLoad.count()
+  await x.db.pageLoad.create({});
+  const totalVisits = await x.db.pageLoad.count();
   return (
     <main>
       <h1>Hello Prisma</h1>
@@ -11,5 +11,5 @@ export default async function Home() {
         {totalVisits}
       </p>
     </main>
-  )
+  );
 }

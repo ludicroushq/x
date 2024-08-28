@@ -1,9 +1,9 @@
-import { createModule } from '@xframework/core'
-import type { Module } from '@xframework/core/types'
+import { createModule } from "@xframework/core";
+import type { Module } from "@xframework/core/types";
 
-export function createDbModule<TInstance, TParams extends any[]>(
-  // eslint-disable-next-line ts/no-empty-object-type
-  moduleCreator: (...args: TParams) => Module<TInstance, {}>,
-) {
-  return createModule(moduleCreator)
-}
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters, @typescript-eslint/no-explicit-any
+export const createDbModule = <TInstance, TParams extends any[]>(
+  moduleCreator: (...args: TParams) => Module<TInstance>,
+): ((...args: TParams) => Module<TInstance>) => {
+  return createModule(moduleCreator);
+};
