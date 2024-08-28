@@ -1,9 +1,11 @@
-import type { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client/extension";
 import { createDbModule } from ".";
 
-export const createPrismaModule = createDbModule((prisma: PrismaClient) => {
-  return {
-    id: "prisma",
-    register: () => prisma,
-  };
-});
+export const createPrismaModule = createDbModule(
+  <T extends PrismaClient>(prisma: T) => {
+    return {
+      id: "prisma",
+      register: () => prisma,
+    };
+  },
+);
