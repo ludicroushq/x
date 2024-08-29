@@ -24,10 +24,6 @@ jobs:
       - run: pnpm install
 
       - uses: changesets/action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: changesets/action@v1
         id: changesets
         with:
           publish: pnpm release
