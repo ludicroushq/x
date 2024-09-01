@@ -2,8 +2,8 @@
   "name": "x",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
+    "build": "turbo build --filter '@xframework/*'",
+    "dev": "turbo dev --filter '@xframework/*'",
     "test": "npm run lint && npm run lint",
     "lint": "turbo lint",
     "pretty": "prettier --write .",

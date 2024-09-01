@@ -11,10 +11,19 @@ export const X = <TModules extends Record<string, Module<unknown, unknown>>>(
     _: {
       modules: {} as XInstance<TModules>["modules"],
       hono,
+      startWorker: async () => {
+        const workers = Object.values(instance._.modules)
+          .map((module: Module<unknown, unknown>) => module.worker)
+          .filter((worker) => worker !== undefined);
+
+        await Promise.all(workers.map((worker) => worker()));
+      },
     },
   } as XInstance<TModules>;
 
   Object.entries(config.modules).forEach(([name, module]) => {
+    // eslint-disable-next-line no-void
+    void module.initialize?.();
     const moduleInstance = module.register();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access

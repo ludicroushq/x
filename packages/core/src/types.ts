@@ -4,6 +4,8 @@ import type { Hono } from "hono";
 export type Module<TInstance, TExtras = {}> = {
   id: string;
   register: () => TInstance;
+  initialize?: () => void | Promise<void>;
+  worker?: () => void | Promise<void>;
   hono?: Hono;
 } & TExtras;
 
@@ -26,5 +28,6 @@ export type XInstance<
       [K in keyof TModules]: TModules[K];
     };
     hono: Hono;
+    startWorker: () => Promise<void>;
   };
 };
