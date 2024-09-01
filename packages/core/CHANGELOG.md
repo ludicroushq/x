@@ -1,5 +1,11 @@
 # @xframework/core
 
+## 0.0.4
+
+### Patch Changes
+
+- d8e2008: add queue support
+
 ## 0.0.3
 
 ### Patch Changes
