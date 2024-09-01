@@ -1,0 +1,32 @@
+{
+  "name": "next-pg-boss",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 4000 --turbo",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --fix --max-warnings 0"
+  },
+  "dependencies": {
+    "@xframework/db": "workspace:*",
+    "@xframework/next": "workspace:*",
+    "@xframework/queue": "workspace:*",
+    "drizzle-orm": "^0.33.0",
+    "next": "15.0.0-rc.0",
+    "pg-boss": "^10.1.1",
+    "postgres": "^3.4.4",
+    "react": "19.0.0-rc-f994737d14-20240522",
+    "react-dom": "19.0.0-rc-f994737d14-20240522"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "drizzle-kit": "^0.24.1",
+    "eslint": "^9.9.1",
+    "eslint-config-next": "15.0.0-rc.0",
+    "eslint-config-sheriff": "^21.1.0",
+    "eslint-define-config": "^2.1.0",
+    "typescript": "^5.5.4"
+  }
+}
