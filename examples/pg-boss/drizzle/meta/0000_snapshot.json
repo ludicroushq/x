@@ -1,25 +1,24 @@
 {
-  "version": "6",
-  "dialect": "sqlite",
-  "id": "25e3aacc-1f2b-46ea-ab18-ff78347e5338",
+  "id": "01d907fd-2a13-4ba4-b0ce-61d0db22d400",
   "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "page_loads": {
+    "public.page_loads": {
       "name": "page_loads",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "loaded_at": {
           "name": "loaded_at",
-          "type": "integer",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         }
       },
       "indexes": {},
@@ -29,12 +28,11 @@
     }
   },
   "enums": {},
+  "schemas": {},
+  "sequences": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "internal": {
-    "indexes": {}
+    "tables": {}
   }
 }

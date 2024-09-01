@@ -10,7 +10,7 @@ type Queues = {
   sayHello: { name: string };
 };
 
-const boss = new PgBoss("postgres://postgres@localhost/pgboss");
+const boss = new PgBoss(process.env.DATABASE_URL!);
 
 export const x = X({
   modules: {

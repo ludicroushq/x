@@ -1,6 +1,6 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { timestamp, pgTable, text } from "drizzle-orm/pg-core";
 
-export const pageLoads = sqliteTable("page_loads", {
+export const pageLoads = pgTable("page_loads", {
   id: text("id"),
-  loadedAt: integer("loaded_at", { mode: "timestamp" }),
+  loadedAt: timestamp("loaded_at"),
 });

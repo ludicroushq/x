@@ -1,14 +1,10 @@
-import {
-  type BetterSQLite3Database,
-  drizzle,
-} from "drizzle-orm/better-sqlite3";
-import Database from "better-sqlite3";
-import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import * as schema from "./schema";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
+import postgres from "postgres";
 
-const sqlite = new Database("./sqlite.db");
-export const db: BetterSQLite3Database<typeof schema> = drizzle(sqlite, {
-  schema,
-});
+const migrationClient = postgres(process.env.DATABASE_URL!, { max: 1 });
+migrate(drizzle(migrationClient), { migrationsFolder: "drizzle" });
 
-migrate(db, { migrationsFolder: "drizzle" });
+const queryClient = postgres(process.env.DATABASE_URL!);
+export const db = drizzle(queryClient, { schema });

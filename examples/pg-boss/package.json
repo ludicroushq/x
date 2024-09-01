@@ -11,15 +11,14 @@
     "@xframework/db": "workspace:*",
     "@xframework/next": "workspace:*",
     "@xframework/queue": "workspace:*",
-    "better-sqlite3": "^11.2.1",
     "drizzle-orm": "^0.33.0",
     "next": "15.0.0-rc.0",
     "pg-boss": "^10.1.1",
+    "postgres": "^3.4.4",
     "react": "19.0.0-rc-f994737d14-20240522",
     "react-dom": "19.0.0-rc-f994737d14-20240522"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.11",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
