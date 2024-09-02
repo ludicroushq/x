@@ -1,10 +1,10 @@
-import { X } from "@xframework/next";
-import { createDrizzleModule } from "@xframework/db/drizzle";
-import { createPgBossModule } from "@xframework/queue/pg-boss";
-import { db } from "../db";
-import PgBoss from "pg-boss";
-import { pageLoads } from "../db/schema";
+import { DrizzleModule } from "@xframework/db/drizzle";
+import { PgBossModule } from "@xframework/queue/pg-boss";
 import { count } from "drizzle-orm";
+import PgBoss from "pg-boss";
+import { db } from "../db";
+import { pageLoads } from "../db/schema";
+import { X } from "@xframework/core";
 
 type Queues = {
   sayHello: { name: string };
@@ -12,19 +12,17 @@ type Queues = {
 
 const boss = new PgBoss(process.env.DATABASE_URL!);
 
-export const x = X({
-  modules: {
-    db: createDrizzleModule(db),
-    queue: createPgBossModule<Queues>(boss),
-  },
-});
+export const x = new X()
+  .module("db", () => new DrizzleModule(db))
+  .module("queue", () => new PgBossModule<Queues>(boss));
 
-x.queue.registerWorkers({
+x.get("queue").registerWorkers({
   sayHello: {
     handler: async (jobs) => {
       for (const job of jobs) {
         // You can use `x`!
-        const totalVisits = await x.db
+        const totalVisits = await x
+          .get("db")
           .select({ count: count() })
           .from(pageLoads);
 
@@ -35,4 +33,4 @@ x.queue.registerWorkers({
   },
 });
 
-x._.startWorker();
+x._.worker();

@@ -2,9 +2,9 @@
 import { x } from "../x";
 
 export async function signInAction() {
-  await x.auth.signIn();
+  await x.get("auth").signIn();
 }
 
 export async function signOutAction() {
-  await x.auth.signOut();
+  await x.get("auth").signOut();
 }

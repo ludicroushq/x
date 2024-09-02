@@ -7,7 +7,7 @@ export class PgBossModule<
   Queues extends Record<string, object>,
 > extends QueueModule {
   private boss: pgBoss;
-  private workers: (() => Promise<void>)[] = [];
+  public workers: (() => Promise<void>)[] = [];
   private queueOptions: { [K in keyof Queues]?: pgBoss.Queue } = {};
 
   constructor(
@@ -25,6 +25,7 @@ export class PgBossModule<
     if (queueOptions) {
       this.queueOptions = queueOptions;
     }
+    this.worker.bind(this);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

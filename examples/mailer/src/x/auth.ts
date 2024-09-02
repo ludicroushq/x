@@ -11,7 +11,7 @@ export const auth = NextAuth({
     Nodemailer({
       server: {},
       sendVerificationRequest: async ({ identifier: email, url }) => {
-        x.mailer
+        x.get("mailer")
           .sendMail({
             to: email,
             subject: "Sign in",

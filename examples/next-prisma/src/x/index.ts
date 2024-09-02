@@ -1,9 +1,5 @@
-import { X } from "@xframework/next";
-import { createPrismaModule } from "@xframework/db/prisma";
+import { X } from "@xframework/core";
 import { prisma } from "../db";
+import { PrismaModule } from "@xframework/db/prisma";
 
-export const x = X({
-  modules: {
-    db: createPrismaModule(prisma),
-  },
-});
+export const x = new X().module("db", () => new PrismaModule(prisma));
