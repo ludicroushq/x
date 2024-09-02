@@ -1,29 +1,33 @@
-import { Hono } from "hono";
+/* eslint-disable no-restricted-syntax */
 import type { NextRequest } from "next/server";
 import type { NextAuthResult } from "next-auth";
-import { createAuthModule } from "..";
+import { AuthModule } from "..";
 
-export const createAuthJsModule = createAuthModule((auth: NextAuthResult) => {
-  const { handlers } = auth;
-  const hono = new Hono();
+export class AuthJsModule extends AuthModule {
+  private auth: NextAuthResult;
 
-  hono.all("/auth/*", async (c) => {
-    const { method, raw } = c.req;
+  constructor(auth: NextAuthResult) {
+    super();
+    this.auth = auth;
 
-    if (!Object.hasOwn(handlers, method)) {
-      return c.newResponse(null, 405);
-    }
+    const { handlers } = auth;
 
-    const handler = handlers[method as keyof typeof handlers];
+    this.hono.all("/auth/*", async (c) => {
+      const { method, raw } = c.req;
 
-    const res = await handler(raw as unknown as NextRequest);
+      if (!Object.hasOwn(handlers, method)) {
+        return c.newResponse(null, 405);
+      }
 
-    return res;
-  });
+      const handler = handlers[method as keyof typeof handlers];
 
-  return {
-    id: "authjs/next",
-    register: () => auth,
-    hono,
-  };
-});
+      const res = await handler(raw as unknown as NextRequest);
+
+      return res;
+    });
+  }
+
+  install(): NextAuthResult {
+    return this.auth;
+  }
+}

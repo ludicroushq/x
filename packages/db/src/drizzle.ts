@@ -1,8 +1,15 @@
-import { createDbModule } from ".";
+/* eslint-disable no-restricted-syntax */
+import { DbModule } from ".";
 
-export const createDrizzleModule = createDbModule(<T>(db: T) => {
-  return {
-    id: "drizzle",
-    register: () => db,
-  };
-});
+export class DrizzleModule<T> extends DbModule {
+  private db: T;
+
+  constructor(db: T) {
+    super();
+    this.db = db;
+  }
+
+  install(): T {
+    return this.db;
+  }
+}

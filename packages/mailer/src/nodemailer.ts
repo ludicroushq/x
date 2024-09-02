@@ -1,9 +1,17 @@
-import type mail from "nodemailer/lib/mailer";
-import { createMailerModule } from ".";
+/* eslint-disable no-restricted-syntax */
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import type Mail from "nodemailer/lib/mailer";
+import { MailerModule } from ".";
 
-export const createNodemailerModule = createMailerModule((transport: mail) => {
-  return {
-    id: "nodemailer",
-    register: () => transport,
-  };
-});
+export class NodemailerModule extends MailerModule {
+  private transport: Mail;
+
+  constructor(transport: Mail) {
+    super();
+    this.transport = transport;
+  }
+
+  install(): Mail {
+    return this.transport;
+  }
+}

@@ -1,8 +1,8 @@
 import type { FetchEventLike } from "hono/types";
 import { handle } from "hono/vercel";
 import type { NextRequest } from "next/server";
-import { X as CoreX } from "@xframework/core";
-import type { Module, XConfig, XInstance } from "@xframework/core/types";
+import type { X } from "@xframework/core";
+import { Module } from "@xframework/core/module";
 
 export type HTTPMethod =
   | "GET"
@@ -22,31 +22,24 @@ type Handlers = {
   [key in HTTPMethod]: Handler;
 };
 
-type NextXInstance<TModules extends Record<string, Module<unknown, unknown>>> =
-  XInstance<TModules> & {
-    handlers: Handlers;
-  };
+// eslint-disable-next-line no-restricted-syntax
+export class NextModule extends Module {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  install(x: X) {
+    const createHandlers = (): Handlers => {
+      const handlers = {} as Handlers;
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export const X = <TModules extends Record<string, Module<unknown, unknown>>>(
-  config: XConfig<TModules>,
-): NextXInstance<TModules> => {
-  const coreInstance = CoreX(config);
+      (
+        ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"] as const
+      ).forEach((method) => {
+        handlers[method] = handle(x._.hono);
+      });
 
-  const createHandlers = (): Handlers => {
-    const handlers = {} as Handlers;
+      return handlers;
+    };
 
-    (
-      ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"] as const
-    ).forEach((method) => {
-      handlers[method] = handle(coreInstance._.hono);
-    });
-
-    return handlers;
-  };
-
-  return {
-    ...coreInstance,
-    handlers: createHandlers(),
-  };
-};
+    return {
+      handlers: createHandlers(),
+    };
+  }
+}

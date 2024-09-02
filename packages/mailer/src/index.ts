@@ -1,9 +1,4 @@
-import { createModule } from "@xframework/core";
-import type { Module } from "@xframework/core/types";
+/* eslint-disable no-restricted-syntax */
+import { Module } from "@xframework/core/module";
 
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
-export const createMailerModule = <TInstance, TParams extends unknown[]>(
-  moduleCreator: (...args: TParams) => Module<TInstance>,
-): ((...args: TParams) => Module<TInstance>) => {
-  return createModule(moduleCreator);
-};
+export abstract class MailerModule extends Module {}
