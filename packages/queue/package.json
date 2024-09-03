@@ -4,14 +4,17 @@
   "type": "module",
   "exports": {
     ".": {
-      "module": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     },
     "./pg-boss": {
-      "module": "./dist/pg-boss.js",
-      "types": "./dist/pg-boss.d.ts"
+      "types": "./dist/pg-boss.d.ts",
+      "require": "./dist/pg-boss.cjs",
+      "import": "./dist/pg-boss.js"
     }
   },
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {

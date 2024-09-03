@@ -4,14 +4,17 @@
   "type": "module",
   "exports": {
     ".": {
-      "module": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     },
     "./authjs/next": {
-      "module": "./dist/authjs/next.js",
-      "types": "./dist/authjs/next.d.ts"
+      "types": "./dist/authjs/next.d.ts",
+      "require": "./dist/authjs/next.cjs",
+      "import": "./dist/authjs/next.js"
     }
   },
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {

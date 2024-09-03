@@ -4,14 +4,17 @@
   "type": "module",
   "exports": {
     ".": {
-      "module": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     },
     "./nodemailer": {
-      "module": "./dist/nodemailer.js",
-      "types": "./dist/nodemailer.d.ts"
+      "types": "./dist/nodemailer.d.ts",
+      "require": "./dist/nodemailer.cjs",
+      "import": "./dist/nodemailer.js"
     }
   },
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {

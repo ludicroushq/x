@@ -4,14 +4,17 @@
   "type": "module",
   "exports": {
     ".": {
-      "module": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     },
     "./module": {
-      "module": "./dist/module.js",
-      "types": "./dist/module.d.ts"
+      "types": "./dist/module.d.ts",
+      "require": "./dist/module.cjs",
+      "import": "./dist/module.js"
     }
   },
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {

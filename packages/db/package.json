@@ -4,18 +4,22 @@
   "type": "module",
   "exports": {
     ".": {
-      "module": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     },
     "./drizzle": {
-      "module": "./dist/drizzle.js",
-      "types": "./dist/drizzle.d.ts"
+      "types": "./dist/drizzle.d.ts",
+      "require": "./dist/drizzle.cjs",
+      "import": "./dist/drizzle.js"
     },
     "./prisma": {
-      "module": "./dist/prisma.js",
-      "types": "./dist/prisma.d.ts"
+      "types": "./dist/prisma.d.ts",
+      "require": "./dist/prisma.cjs",
+      "import": "./dist/prisma.js"
     }
   },
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {
