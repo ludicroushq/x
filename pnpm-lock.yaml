@@ -88,6 +88,9 @@ importers:
       '@xframework/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@xframework/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@xframework/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -161,6 +164,9 @@ importers:
       '@xframework/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@xframework/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@xframework/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -219,12 +225,12 @@ importers:
 
   examples/next-drizzle:
     dependencies:
+      '@xframework/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@xframework/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@xframework/next':
-        specifier: workspace:*
-        version: link:../../packages/next
       better-sqlite3:
         specifier: ^11.2.1
         version: 11.2.1
@@ -277,12 +283,12 @@ importers:
       '@prisma/client':
         specifier: 5.18.0
         version: 5.18.0(prisma@5.18.0)
+      '@xframework/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@xframework/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@xframework/next':
-        specifier: workspace:*
-        version: link:../../packages/next
       better-sqlite3:
         specifier: ^11.2.1
         version: 11.2.1
@@ -329,12 +335,12 @@ importers:
 
   examples/pg-boss:
     dependencies:
+      '@xframework/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@xframework/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@xframework/next':
-        specifier: workspace:*
-        version: link:../../packages/next
       '@xframework/queue':
         specifier: workspace:*
         version: link:../../packages/queue

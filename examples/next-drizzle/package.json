@@ -8,8 +8,8 @@
     "lint": "eslint . --fix --max-warnings 0"
   },
   "dependencies": {
+    "@xframework/core": "workspace:*",
     "@xframework/db": "workspace:*",
-    "@xframework/next": "workspace:*",
     "better-sqlite3": "^11.2.1",
     "drizzle-orm": "^0.33.0",
     "next": "15.0.0-rc.0",

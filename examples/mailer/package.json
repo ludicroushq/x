@@ -10,6 +10,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.4.2",
     "@xframework/auth": "workspace:*",
+    "@xframework/core": "workspace:*",
     "@xframework/db": "workspace:*",
     "@xframework/mailer": "workspace:*",
     "@xframework/next": "workspace:*",

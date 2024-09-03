@@ -1,46 +1,86 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable no-restricted-syntax */
 import { Hono } from "hono";
-import type { Module, XConfig, XInstance } from "./types";
+import type { Module, ModuleFactory, Modules } from "./module";
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export const X = <TModules extends Record<string, Module<unknown, unknown>>>(
-  config: XConfig<TModules>,
-): XInstance<TModules> => {
-  const hono = new Hono().basePath("/x");
+type XWithModules<T extends Modules> = Omit<
+  X<T>,
+  "get" | "module" | "use" | "start"
+> &
+  T;
 
-  const instance = {
-    _: {
-      modules: {} as XInstance<TModules>["modules"],
-      hono,
-      startWorker: async () => {
-        const workers = Object.values(instance._.modules)
-          .map((module: Module<unknown, unknown>) => module.worker)
-          .filter((worker) => worker !== undefined);
+export class X<RegisteredModules extends Modules = {}> {
+  private modules: Map<string, Module> = new Map();
+  private cache: Map<string, unknown> = new Map();
+  private workers: (() => Promise<void> | void)[] = [];
+  public readonly _: { hono: Hono; worker: () => Promise<void> };
 
-        await Promise.all(workers.map((worker) => worker()));
+  constructor() {
+    this._ = {
+      hono: new Hono().basePath("/x"),
+      worker: async () => {
+        await Promise.all(this.workers.map((worker) => worker()));
       },
-    },
-  } as XInstance<TModules>;
+    };
+  }
 
-  Object.entries(config.modules).forEach(([name, module]) => {
+  module<ModuleKey extends string, ModuleReturnType>(
+    key: ModuleKey,
+    factory: ModuleFactory<RegisteredModules, ModuleReturnType>,
+  ): X<RegisteredModules & { [Key in ModuleKey]: ModuleReturnType }> {
+    const moduleInstance = factory(this as X<RegisteredModules>);
+
     // eslint-disable-next-line no-void
-    void module.initialize?.();
-    const moduleInstance = module.register();
+    void moduleInstance.initialize();
+    this._.hono.route("/", moduleInstance.hono);
+    this.modules.set(key, moduleInstance);
+    this.workers.push(moduleInstance.worker.bind(moduleInstance));
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-    (instance as any)[name] = moduleInstance;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-    (instance._.modules as any)[name] = { ...module };
+    return this as X<
+      RegisteredModules & { [Key in ModuleKey]: ModuleReturnType }
+    >;
+  }
 
-    if (module.hono) {
-      hono.route("/", module.hono);
+  use<NewModules extends Modules>(
+    other: X<NewModules>,
+  ): X<RegisteredModules & NewModules> {
+    other.modules.forEach((module, key) => {
+      this.modules.set(key, module);
+    });
+
+    return this as X<RegisteredModules & NewModules>;
+  }
+
+  private get<ModuleKey extends keyof RegisteredModules>(
+    key: ModuleKey,
+  ): RegisteredModules[ModuleKey] {
+    if (!this.cache.has(key as string)) {
+      const module = this.modules.get(key as string);
+
+      if (module) {
+        const installedModule = module.install(this);
+
+        this.cache.set(key as string, installedModule);
+      } else {
+        throw new Error(`Module "${String(key)}" not found`);
+      }
     }
-  });
 
-  return instance;
-};
+    return this.cache.get(key as string) as RegisteredModules[ModuleKey];
+  }
 
-export const createModule = <TInstance, TExtras, TParams extends unknown[]>(
-  moduleCreator: (...args: TParams) => Module<TInstance, TExtras>,
-): ((...args: TParams) => Module<TInstance, TExtras>) => {
-  return moduleCreator;
-};
+  start(): XWithModules<RegisteredModules> {
+    return new Proxy(this, {
+      get: (target, prop: string | symbol) => {
+        if (prop in target) {
+          return (target as X<RegisteredModules>)[
+            prop as keyof X<RegisteredModules>
+          ];
+        }
+
+        return target.get(prop as keyof RegisteredModules);
+      },
+    }) as XWithModules<RegisteredModules>;
+  }
+}

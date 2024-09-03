@@ -1,11 +1,16 @@
+/* eslint-disable no-restricted-syntax */
 import type { PrismaClient } from "@prisma/client/extension";
-import { createDbModule } from ".";
+import { DbModule } from ".";
 
-export const createPrismaModule = createDbModule(
-  <T extends PrismaClient>(prisma: T) => {
-    return {
-      id: "prisma",
-      register: () => prisma,
-    };
-  },
-);
+export class PrismaModule<T extends PrismaClient> extends DbModule {
+  private prisma: T;
+
+  constructor(db: T) {
+    super();
+    this.prisma = db;
+  }
+
+  install(): T {
+    return this.prisma;
+  }
+}
