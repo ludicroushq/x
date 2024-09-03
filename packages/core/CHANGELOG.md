@@ -1,5 +1,12 @@
 # @xframework/core
 
+## 0.1.1
+
+### Patch Changes
+
+- 55a99d1: update module resolution
+- a48040b: add commonjs
+
 ## 0.1.0
 
 ### Minor Changes
