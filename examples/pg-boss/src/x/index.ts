@@ -14,15 +14,15 @@ const boss = new PgBoss(process.env.DATABASE_URL!);
 
 export const x = new X()
   .module("db", () => new DrizzleModule(db))
-  .module("queue", () => new PgBossModule<Queues>(boss));
+  .module("queue", () => new PgBossModule<Queues>(boss))
+  .start();
 
-x.get("queue").registerWorkers({
+x.queue.registerWorkers({
   sayHello: {
     handler: async (jobs) => {
       for (const job of jobs) {
         // You can use `x`!
-        const totalVisits = await x
-          .get("db")
+        const totalVisits = await x.db
           .select({ count: count() })
           .from(pageLoads);
 

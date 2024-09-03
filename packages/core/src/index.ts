@@ -4,6 +4,12 @@
 import { Hono } from "hono";
 import type { Module, ModuleFactory, Modules } from "./module";
 
+type XWithModules<T extends Modules> = Omit<
+  X<T>,
+  "get" | "module" | "use" | "start"
+> &
+  T;
+
 export class X<RegisteredModules extends Modules = {}> {
   private modules: Map<string, Module> = new Map();
   private cache: Map<string, unknown> = new Map();
@@ -46,7 +52,7 @@ export class X<RegisteredModules extends Modules = {}> {
     return this as X<RegisteredModules & NewModules>;
   }
 
-  get<ModuleKey extends keyof RegisteredModules>(
+  private get<ModuleKey extends keyof RegisteredModules>(
     key: ModuleKey,
   ): RegisteredModules[ModuleKey] {
     if (!this.cache.has(key as string)) {
@@ -62,5 +68,19 @@ export class X<RegisteredModules extends Modules = {}> {
     }
 
     return this.cache.get(key as string) as RegisteredModules[ModuleKey];
+  }
+
+  start(): XWithModules<RegisteredModules> {
+    return new Proxy(this, {
+      get: (target, prop: string | symbol) => {
+        if (prop in target) {
+          return (target as X<RegisteredModules>)[
+            prop as keyof X<RegisteredModules>
+          ];
+        }
+
+        return target.get(prop as keyof RegisteredModules);
+      },
+    }) as XWithModules<RegisteredModules>;
   }
 }

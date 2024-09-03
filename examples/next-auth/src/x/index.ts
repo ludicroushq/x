@@ -8,4 +8,5 @@ import { NextModule } from "@xframework/next";
 export const x = new X()
   .module("db", () => new DrizzleModule(db))
   .module("auth", () => new AuthJsModule(auth))
-  .module("next", () => new NextModule());
+  .module("next", () => new NextModule())
+  .start();

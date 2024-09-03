@@ -11,4 +11,5 @@ export const x = new X()
   .module("auth", () => new AuthJsModule(auth))
   .module("db", () => new DrizzleModule(db))
   .module("mailer", () => new NodemailerModule(mailer))
-  .module("next", () => new NextModule());
+  .module("next", () => new NextModule())
+  .start();

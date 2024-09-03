@@ -2,7 +2,7 @@ import { x } from "../x";
 import { signInAction, signOutAction } from "./actions";
 
 export default async function Home() {
-  const user = await x.get("auth").auth();
+  const user = await x.auth.auth();
   return (
     <main>
       <h1>Hello Auth.js</h1>
