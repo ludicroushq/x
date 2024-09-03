@@ -1,5 +1,11 @@
 # @xframework/core
 
+## 0.1.0
+
+### Minor Changes
+
+- 13ad23c: switch to class api
+
 ## 0.0.4
 
 ### Patch Changes
