@@ -17,7 +17,7 @@
     "better-sqlite3": "^11.2.1",
     "drizzle-orm": "^0.33.0",
     "next": "15.0.0-rc.0",
-    "next-auth": "undefined",
+    "next-auth": "5.0.0-beta.20",
     "nodemailer": "^6.9.14",
     "react": "19.0.0-rc-f994737d14-20240522",
     "react-dom": "19.0.0-rc-f994737d14-20240522"
