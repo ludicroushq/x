@@ -1,22 +1,23 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable unicorn/consistent-function-scoping */
-import type pgBoss from "pg-boss";
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import type PgBoss from "pg-boss";
 import { QueueModule } from ".";
 
 export class PgBossModule<
   Queues extends Record<string, object>,
 > extends QueueModule {
-  private boss: pgBoss;
+  private boss: PgBoss;
   public workers: (() => Promise<void>)[] = [];
-  private queueOptions: { [K in keyof Queues]?: pgBoss.Queue } = {};
+  private queueOptions: { [K in keyof Queues]?: PgBoss.Queue } = {};
 
   constructor(
-    boss: pgBoss,
+    boss: PgBoss,
     {
       queueOptions,
     }: {
       queueOptions?: {
-        [K in keyof Queues]?: pgBoss.Queue;
+        [K in keyof Queues]?: PgBoss.Queue;
       };
     } = {},
   ) {
@@ -25,7 +26,6 @@ export class PgBossModule<
     if (queueOptions) {
       this.queueOptions = queueOptions;
     }
-    this.worker.bind(this);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -34,7 +34,7 @@ export class PgBossModule<
       name: Name,
       data: Queues[Name],
       // eslint-disable-next-line fsecond/prefer-destructured-optionals
-      options?: pgBoss.SendOptions,
+      options?: PgBoss.SendOptions,
     ) => {
       if (options) {
         return this.boss.send(name, data, options);
@@ -43,10 +43,10 @@ export class PgBossModule<
       return this.boss.send(name, data);
     };
 
-    const registerWorkers = (workersMap: {
+    const registerWorkers = async (workersMap: {
       [K in keyof Queues]: {
-        handler: pgBoss.WorkHandler<Queues[K]>;
-        workOptions?: pgBoss.WorkOptions;
+        handler: PgBoss.WorkHandler<Queues[K]>;
+        workOptions?: PgBoss.WorkOptions;
       };
     }) => {
       for (const name of Object.keys(workersMap)) {
@@ -61,8 +61,7 @@ export class PgBossModule<
             await this.boss.work(name, handler);
           }
         });
-        // eslint-disable-next-line no-void
-        void this.boss.createQueue(name, this.queueOptions[name]);
+        await this.boss.createQueue(name, this.queueOptions[name]);
       }
     };
 
