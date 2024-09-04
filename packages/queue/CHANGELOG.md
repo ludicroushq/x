@@ -1,5 +1,11 @@
 # @xframework/queue
 
+## 0.1.2
+
+### Patch Changes
+
+- 8aebcf1: pgboss updates
+
 ## 0.1.1
 
 ### Patch Changes
