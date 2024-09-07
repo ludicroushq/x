@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-/* eslint-disable no-restricted-syntax */
 import { Hono } from "hono";
 import type { Module, ModuleFactory, Modules } from "./module";
 
@@ -10,6 +7,7 @@ type XWithModules<T extends Modules> = Omit<
 > &
   T;
 
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
 export class X<RegisteredModules extends Modules = {}> {
   private modules: Map<string, Module> = new Map();
   private cache: Map<string, unknown> = new Map();
@@ -31,7 +29,6 @@ export class X<RegisteredModules extends Modules = {}> {
   ): X<RegisteredModules & { [Key in ModuleKey]: ModuleReturnType }> {
     const moduleInstance = factory(this as X<RegisteredModules>);
 
-    // eslint-disable-next-line no-void
     void moduleInstance.initialize();
     this._.hono.route("/", moduleInstance.hono);
     this.modules.set(key, moduleInstance);

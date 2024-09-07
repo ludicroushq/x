@@ -1,15 +1,16 @@
+import { X } from "@xframework/core";
 import { DrizzleModule } from "@xframework/db/drizzle";
 import { PgBossModule } from "@xframework/queue/pg-boss";
 import { count } from "drizzle-orm";
 import PgBoss from "pg-boss";
 import { db } from "../db";
 import { pageLoads } from "../db/schema";
-import { X } from "@xframework/core";
 
 type Queues = {
   sayHello: { name: string };
 };
 
+// biome-ignore lint/style/noNonNullAssertion: <explanation>
 const boss = new PgBoss(process.env.DATABASE_URL!);
 
 export const x = new X()

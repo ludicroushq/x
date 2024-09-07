@@ -22,8 +22,7 @@
   },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
-    "lint": "eslint . --fix --max-warnings 0"
+    "dev": "tsup --watch"
   },
   "peerDependencies": {
     "next-auth": "5.0.0-beta.20",
@@ -43,9 +42,6 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
-    "eslint": "^9.9.1",
-    "eslint-config-sheriff": "^21.1.0",
-    "eslint-define-config": "^2.1.0",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4"
   }

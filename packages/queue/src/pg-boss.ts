@@ -1,6 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable unicorn/consistent-function-scoping */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 import type PgBoss from "pg-boss";
 import { QueueModule } from ".";
 
@@ -28,12 +25,10 @@ export class PgBossModule<
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   install() {
     const send = <Name extends keyof Queues & string>(
       name: Name,
       data: Queues[Name],
-      // eslint-disable-next-line fsecond/prefer-destructured-optionals
       options?: PgBoss.SendOptions,
     ) => {
       if (options) {
@@ -43,14 +38,16 @@ export class PgBossModule<
       return this.boss.send(name, data);
     };
 
-    const registerWorkers = async (workersMap: {
-      [K in keyof Queues]: {
-        handler: PgBoss.WorkHandler<Queues[K]>;
-        workOptions?: PgBoss.WorkOptions;
-      };
-    }) => {
+    const registerWorkers = async (
+      workersMap: {
+        [K in keyof Queues]: {
+          handler: PgBoss.WorkHandler<Queues[K]>;
+          workOptions?: PgBoss.WorkOptions;
+        };
+      },
+    ) => {
       for (const name of Object.keys(workersMap)) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
         const val = workersMap[name]!;
         const { handler, workOptions } = val;
 

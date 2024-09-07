@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { RootProvider } from "fumadocs-ui/provider";
+import type { Metadata } from "next";
 import "./global.css";
 
 export const metadata: Metadata = {

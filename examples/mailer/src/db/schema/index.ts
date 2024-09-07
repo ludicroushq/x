@@ -1,8 +1,8 @@
 import {
   integer,
+  primaryKey,
   sqliteTable,
   text,
-  primaryKey,
 } from "drizzle-orm/sqlite-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 

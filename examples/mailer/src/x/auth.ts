@@ -1,7 +1,7 @@
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 import Nodemailer from "next-auth/providers/nodemailer";
 import { x } from ".";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "../db";
 
 export const auth = NextAuth({
@@ -21,7 +21,7 @@ export const auth = NextAuth({
             console.log("---");
             console.log(info.message.toString().replaceAll("=\r\n", ""));
             console.log("---");
-            console.log("Clickable URL: " + url);
+            console.log(`Clickable URL: ${url}`);
           });
       },
     }),

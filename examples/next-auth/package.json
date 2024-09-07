@@ -4,8 +4,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint . --fix --max-warnings 0"
+    "start": "next start"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.4.2",
@@ -26,10 +25,6 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "drizzle-kit": "^0.24.1",
-    "eslint": "^9.9.1",
-    "eslint-config-next": "15.0.0-rc.0",
-    "eslint-config-sheriff": "^21.1.0",
-    "eslint-define-config": "^2.1.0",
     "typescript": "^5.5.4"
   }
 }
