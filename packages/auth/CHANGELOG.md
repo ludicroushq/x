@@ -1,5 +1,12 @@
 # @xframework/auth
 
+## 0.1.2
+
+### Patch Changes
+
+- 9be5b2d: update auth type
+  - next-auth@undefined
+
 ## 0.1.1
 
 ### Patch Changes
