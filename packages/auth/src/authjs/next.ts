@@ -3,10 +3,13 @@ import type { NextAuthResult } from "next-auth";
 import type { NextRequest } from "next/server";
 import type { AuthModule } from "..";
 
-export class AuthJsModule extends Module implements AuthModule {
-  private auth: NextAuthResult;
+export class AuthJsModule<Auth extends NextAuthResult>
+  extends Module
+  implements AuthModule
+{
+  private auth: Auth;
 
-  constructor(auth: NextAuthResult) {
+  constructor(auth: Auth) {
     super();
     this.auth = auth;
 
@@ -27,7 +30,7 @@ export class AuthJsModule extends Module implements AuthModule {
     });
   }
 
-  install(): NextAuthResult {
+  install(): Auth {
     return this.auth;
   }
 }
