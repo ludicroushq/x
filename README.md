@@ -7,26 +7,27 @@ It is a lightweight **un-opinionated** framework of pluggable modules, allowing 
 ## Example
 
 ```ts
-import { X } from "@xframework/next";
+import { XFramework } from "@xframework/core";
 import { createDrizzleModule } from "@xframework/db/drizzle";
 import { createAuthJsModule } from "@xframework/auth/auth-js/next";
 import { createStripeModule } from "@xframework/payment/stripe";
 
-export const x = X({
-  modules: {
-    db: createDrizzleModule(db),
-    auth: createAuthJsModule(authConfig),
-    stripe: createStripeModule({
-      apiKey,
-      webhooks: {
-        onCustomerCreated() {
-          // ...
-        },
-      },
-    }),
-    // ... and more ...
-  },
-});
+export const x = new XFramework()
+  .module("db", () => new DrizzleModule(db))
+  .module("auth", () => new AuthJsModule(auth))
+  .module("mailer", () => new NodemailerModule(mailer))
+  .module("stripe", () => new StripeModule({
+    apiKey,
+    webhooks: {
+      onCustomerCreated() {
+        // ...
+      }
+    }
+  }))
+  .module("next", () => new NextModule())
+  // ... and more ...
+  .build();
+
 
 // Usage
 const users = x.db.select().from(users);

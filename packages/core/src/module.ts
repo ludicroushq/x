@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import type { X } from ".";
+import type { XFramework } from ".";
 
 export class Module {
   hono: Hono;
@@ -8,7 +8,7 @@ export class Module {
     this.hono = new Hono();
   }
 
-  install(x: X): unknown {
+  install(x: XFramework): unknown {
     throw new Error("install method must be implemented");
   }
 
@@ -20,5 +20,5 @@ export class Module {
 export type Modules = Record<string, unknown>;
 
 export type ModuleFactory<CurrentModules extends Modules, ReturnType> = (
-  x: X<CurrentModules>,
-) => Module & { install: (x: X) => ReturnType };
+  x: XFramework<CurrentModules>,
+) => Module & { install: (x: XFramework) => ReturnType };

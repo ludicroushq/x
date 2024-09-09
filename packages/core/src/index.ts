@@ -2,13 +2,13 @@ import { Hono } from "hono";
 import type { Module, ModuleFactory, Modules } from "./module";
 
 type XWithModules<T extends Modules> = Omit<
-  X<T>,
+  XFramework<T>,
   "get" | "module" | "use" | "start"
 > &
   T;
 
 // biome-ignore lint/complexity/noBannedTypes: <explanation>
-export class X<RegisteredModules extends Modules = {}> {
+export class XFramework<RegisteredModules extends Modules = {}> {
   private modules: Map<string, Module> = new Map();
   private cache: Map<string, unknown> = new Map();
   private workers: (() => Promise<void> | void)[] = [];
@@ -26,27 +26,27 @@ export class X<RegisteredModules extends Modules = {}> {
   module<ModuleKey extends string, ModuleReturnType>(
     key: ModuleKey,
     factory: ModuleFactory<RegisteredModules, ModuleReturnType>,
-  ): X<RegisteredModules & { [Key in ModuleKey]: ModuleReturnType }> {
-    const moduleInstance = factory(this as X<RegisteredModules>);
+  ): XFramework<RegisteredModules & { [Key in ModuleKey]: ModuleReturnType }> {
+    const moduleInstance = factory(this as XFramework<RegisteredModules>);
 
     void moduleInstance.initialize();
     this._.hono.route("/", moduleInstance.hono);
     this.modules.set(key, moduleInstance);
     this.workers.push(moduleInstance.worker.bind(moduleInstance));
 
-    return this as X<
+    return this as XFramework<
       RegisteredModules & { [Key in ModuleKey]: ModuleReturnType }
     >;
   }
 
   use<NewModules extends Modules>(
-    other: X<NewModules>,
-  ): X<RegisteredModules & NewModules> {
+    other: XFramework<NewModules>,
+  ): XFramework<RegisteredModules & NewModules> {
     other.modules.forEach((module, key) => {
       this.modules.set(key, module);
     });
 
-    return this as X<RegisteredModules & NewModules>;
+    return this as XFramework<RegisteredModules & NewModules>;
   }
 
   private get<ModuleKey extends keyof RegisteredModules>(
@@ -67,12 +67,12 @@ export class X<RegisteredModules extends Modules = {}> {
     return this.cache.get(key as string) as RegisteredModules[ModuleKey];
   }
 
-  start(): XWithModules<RegisteredModules> {
+  build(): XWithModules<RegisteredModules> {
     return new Proxy(this, {
       get: (target, prop: string | symbol) => {
         if (prop in target) {
-          return (target as X<RegisteredModules>)[
-            prop as keyof X<RegisteredModules>
+          return (target as XFramework<RegisteredModules>)[
+            prop as keyof XFramework<RegisteredModules>
           ];
         }
 

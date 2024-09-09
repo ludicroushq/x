@@ -1,4 +1,4 @@
-import { X } from "@xframework/core";
+import { XFramework } from "@xframework/core";
 import { DrizzleModule } from "@xframework/db/drizzle";
 import { PgBossModule } from "@xframework/queue/pg-boss";
 import { count } from "drizzle-orm";
@@ -13,10 +13,10 @@ type Queues = {
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
 const boss = new PgBoss(process.env.DATABASE_URL!);
 
-export const x = new X()
+export const x = new XFramework()
   .module("db", () => new DrizzleModule(db))
   .module("queue", () => new PgBossModule<Queues>(boss))
-  .start();
+  .build();
 
 x.queue.registerWorkers({
   sayHello: {

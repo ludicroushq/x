@@ -1,4 +1,4 @@
-import type { X } from "@xframework/core";
+import type { XFramework } from "@xframework/core";
 import { Module } from "@xframework/core/module";
 import type { FetchEventLike } from "hono/types";
 import { handle } from "hono/vercel";
@@ -23,7 +23,7 @@ type Handlers = {
 };
 
 export class NextModule extends Module {
-  install(x: X) {
+  install(x: XFramework) {
     const createHandlers = (): Handlers => {
       const handlers = {} as Handlers;
 
