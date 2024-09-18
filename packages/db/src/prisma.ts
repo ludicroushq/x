@@ -1,7 +1,6 @@
-import type { PrismaClient } from "@prisma/client/extension";
 import { DbModule } from ".";
 
-export class PrismaModule<T extends PrismaClient> extends DbModule {
+export class PrismaModule<T> extends DbModule {
   private prisma: T;
 
   constructor(db: T) {
