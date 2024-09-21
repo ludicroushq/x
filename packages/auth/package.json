@@ -25,7 +25,7 @@
     "dev": "tsup --watch"
   },
   "peerDependencies": {
-    "next-auth": "undefined",
+    "next-auth": "5.0.0-beta.20",
     "next": ">=13.0.0 || ^15.0.0-rc"
   },
   "peerDependenciesMeta": {
