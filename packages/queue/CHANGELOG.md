@@ -1,5 +1,13 @@
 # @xframework/queue
 
+## 0.1.3
+
+### Patch Changes
+
+- ffccc56: improve pg-boss types
+- Updated dependencies [882274c]
+  - @xframework/core@0.2.0
+
 ## 0.1.2
 
 ### Patch Changes

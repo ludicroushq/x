@@ -1,5 +1,13 @@
 # @xframework/auth
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [882274c]
+  - @xframework/core@0.2.0
+  - next-auth@undefined
+
 ## 0.1.2
 
 ### Patch Changes
