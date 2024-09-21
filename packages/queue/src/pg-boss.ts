@@ -77,3 +77,17 @@ export class PgBossModule<
     await Promise.all(this.workers.map((worker) => worker()));
   }
 }
+
+export interface Worker<K> {
+  handler: PgBoss.WorkHandler<K>;
+  workOptions?: PgBoss.WorkOptions;
+}
+
+export type Workers<Queues extends Record<string, object>> = {
+  [K in keyof Queues]: Worker<Queues[K]>;
+};
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export type WorkerQueues<T extends Record<string, Worker<any>>> = {
+  [K in keyof T]: T[K] extends Worker<infer U> ? U : never;
+};
