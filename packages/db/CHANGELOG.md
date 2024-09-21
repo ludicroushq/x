@@ -1,5 +1,13 @@
 # @xframework/db
 
+## 0.1.2
+
+### Patch Changes
+
+- 5625ee7: fix prisma types
+- Updated dependencies [882274c]
+  - @xframework/core@0.2.0
+
 ## 0.1.1
 
 ### Patch Changes

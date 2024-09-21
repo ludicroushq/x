@@ -1,5 +1,11 @@
 # @xframework/core
 
+## 0.2.0
+
+### Minor Changes
+
+- 882274c: rename x class and rename start to build
+
 ## 0.1.1
 
 ### Patch Changes
