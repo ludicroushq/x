@@ -1,25 +1,33 @@
 import type PgBoss from "pg-boss";
 import { QueueModule } from ".";
+import { error } from "console";
 
 export class PgBossModule<
-  Queues extends Record<string, object>,
+  Queues extends Record<string, object>
 > extends QueueModule {
   private boss: PgBoss;
   public workers: (() => Promise<void>)[] = [];
   private queueOptions: { [K in keyof Queues]?: PgBoss.Queue } = {};
+  private onJobError: (error: unknown) => void;
 
   constructor(
     boss: PgBoss,
     {
+      onPgBossError,
+      onJobError,
       queueOptions,
     }: {
+      onPgBossError: (error: Error) => void;
+      onJobError: (error: unknown) => void;
       queueOptions?: {
         [K in keyof Queues]?: PgBoss.Queue;
       };
-    } = {},
+    }
   ) {
     super();
     this.boss = boss;
+    boss.on("error", onPgBossError);
+    this.onJobError = onJobError;
     if (queueOptions) {
       this.queueOptions = queueOptions;
     }
@@ -29,7 +37,7 @@ export class PgBossModule<
     const send = <Name extends keyof Queues & string>(
       name: Name,
       data: Queues[Name],
-      options?: PgBoss.SendOptions,
+      options?: PgBoss.SendOptions
     ) => {
       if (options) {
         return this.boss.send(name, data, options);
@@ -38,24 +46,33 @@ export class PgBossModule<
       return this.boss.send(name, data);
     };
 
-    const registerWorkers = async (
-      workersMap: {
-        [K in keyof Queues]: {
-          handler: PgBoss.WorkHandler<Queues[K]>;
-          workOptions?: PgBoss.WorkOptions;
-        };
-      },
-    ) => {
+    const registerWorkers = async (workersMap: {
+      [K in keyof Queues]: {
+        handler: PgBoss.WorkHandler<Queues[K]>;
+        workOptions?: PgBoss.WorkOptions;
+      };
+    }) => {
       for (const name of Object.keys(workersMap)) {
         // biome-ignore lint/style/noNonNullAssertion: <explanation>
         const val = workersMap[name]!;
         const { handler, workOptions } = val;
 
+        const safeHandler: PgBoss.WorkHandler<Queues[string]> = async (
+          args
+        ) => {
+          try {
+            await handler(args);
+          } catch (err) {
+            this.onJobError(err);
+            throw err;
+          }
+        };
+
         this.workers.push(async () => {
           if (workOptions) {
-            await this.boss.work(name, workOptions, handler);
+            await this.boss.work(name, workOptions, safeHandler);
           } else {
-            await this.boss.work(name, handler);
+            await this.boss.work(name, safeHandler);
           }
         });
         await this.boss.createQueue(name, this.queueOptions[name]);
