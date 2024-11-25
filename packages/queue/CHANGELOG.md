@@ -1,5 +1,11 @@
 # @xframework/queue
 
+## 0.1.4
+
+### Patch Changes
+
+- 9669d43: add error handles to pgboss
+
 ## 0.1.3
 
 ### Patch Changes
