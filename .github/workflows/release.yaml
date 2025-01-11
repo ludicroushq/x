@@ -6,9 +6,13 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
+  test:
+    uses: ./.github/workflows/_test.yaml
+    secrets: inherit
+
   release:
-    name: Release
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v4
 
