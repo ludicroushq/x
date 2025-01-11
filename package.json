@@ -37,5 +37,5 @@
       "prettier --ignore-unknown --write"
     ]
   },
-  "packageManager": "pnpm@10"
+  "packageManager": "pnpm@10.0.0"
 }
