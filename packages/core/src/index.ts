@@ -29,7 +29,7 @@ export class XFramework<RegisteredModules extends Modules = {}> {
   ): XFramework<RegisteredModules & { [Key in ModuleKey]: ModuleReturnType }> {
     const moduleInstance = factory(this as XFramework<RegisteredModules>);
 
-    void moduleInstance.initialize();
+    moduleInstance.initialize();
     this._.hono.route("/", moduleInstance.hono);
     this.modules.set(key, moduleInstance);
     this.workers.push(moduleInstance.worker.bind(moduleInstance));

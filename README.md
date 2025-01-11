@@ -16,18 +16,21 @@ export const x = new XFramework()
   .module("db", () => new DrizzleModule(db))
   .module("auth", () => new AuthJsModule(auth))
   .module("mailer", () => new NodemailerModule(mailer))
-  .module("stripe", () => new StripeModule({
-    apiKey,
-    webhooks: {
-      onCustomerCreated() {
-        // ...
-      }
-    }
-  }))
+  .module(
+    "stripe",
+    () =>
+      new StripeModule({
+        apiKey,
+        webhooks: {
+          onCustomerCreated() {
+            // ...
+          },
+        },
+      }),
+  )
   .module("next", () => new NextModule())
   // ... and more ...
   .build();
-
 
 // Usage
 const users = x.db.select().from(users);

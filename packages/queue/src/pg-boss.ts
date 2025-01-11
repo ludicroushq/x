@@ -1,9 +1,8 @@
 import type PgBoss from "pg-boss";
 import { QueueModule } from ".";
-import { error } from "console";
 
 export class PgBossModule<
-  Queues extends Record<string, object>
+  Queues extends Record<string, object>,
 > extends QueueModule {
   private boss: PgBoss;
   public workers: (() => Promise<void>)[] = [];
@@ -22,7 +21,7 @@ export class PgBossModule<
       queueOptions?: {
         [K in keyof Queues]?: PgBoss.Queue;
       };
-    }
+    },
   ) {
     super();
     this.boss = boss;
@@ -37,7 +36,7 @@ export class PgBossModule<
     const send = <Name extends keyof Queues & string>(
       name: Name,
       data: Queues[Name],
-      options?: PgBoss.SendOptions
+      options?: PgBoss.SendOptions,
     ) => {
       if (options) {
         return this.boss.send(name, data, options);
@@ -58,7 +57,7 @@ export class PgBossModule<
         const { handler, workOptions } = val;
 
         const safeHandler: PgBoss.WorkHandler<Queues[string]> = async (
-          args
+          args,
         ) => {
           try {
             await handler(args);
