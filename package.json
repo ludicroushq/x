@@ -22,6 +22,7 @@
     "lint-staged": "^15.3.0",
     "neostandard": "^0.12.0",
     "prettier": "^3.4.2",
+    "tsup": "^8.2.4",
     "turbo": "^2.0.14",
     "typescript": "^5.5.4"
   },

@@ -1,11 +1,3 @@
-import { defineConfig } from "tsup";
+import { tsupConfig } from "../../utils/tsup.config";
 
-export default defineConfig({
-  entry: ["src"],
-  format: ["cjs", "esm"],
-  dts: true,
-  splitting: false,
-  sourcemap: true,
-  clean: true,
-  outDir: "dist",
-});
+export default tsupConfig;
