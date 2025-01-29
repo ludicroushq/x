@@ -52,7 +52,6 @@ export class PgBossModule<
       };
     }) => {
       for (const name of Object.keys(workersMap)) {
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
         const val = workersMap[name]!;
         const { handler, workOptions } = val;
 
@@ -103,7 +102,6 @@ export type Workers<Queues extends Record<string, object>> = {
   [K in keyof Queues]: Worker<Queues[K]>;
 };
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export type WorkerQueues<T extends Record<string, Worker<any>>> = {
   [K in keyof T]: T[K] extends Worker<infer U> ? U : never;
 };

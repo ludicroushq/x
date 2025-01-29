@@ -5,10 +5,20 @@ import PgBoss from "pg-boss";
 import { db } from "../db";
 import type { Queues } from "./queue";
 
-// biome-ignore lint/style/noNonNullAssertion: <explanation>
 const boss = new PgBoss(process.env.DATABASE_URL!);
 
 export const x = new XFramework()
   .module("db", () => new DrizzleModule(db))
-  .module("queue", () => new PgBossModule<Queues>(boss))
+  .module(
+    "queue",
+    () =>
+      new PgBossModule<Queues>(boss, {
+        onJobError(error) {
+          console.error(error);
+        },
+        onPgBossError(error) {
+          console.error(error);
+        },
+      }),
+  )
   .build();

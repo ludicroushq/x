@@ -7,7 +7,6 @@ type XWithModules<T extends Modules> = Omit<
 > &
   T;
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
 export class XFramework<RegisteredModules extends Modules = {}> {
   private modules: Map<string, Module> = new Map();
   private cache: Map<string, unknown> = new Map();
