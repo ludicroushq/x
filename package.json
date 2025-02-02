@@ -3,14 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "turbo build --filter '@xframework/*'",
+    "build": "turbo build --filter '@xframework/*' --filter 'x'",
     "ci:test": "concurrently pnpm:ci:test:*",
     "ci:test:lint": "eslint --max-warnings 0 .",
     "ci:test:pretty": "prettier --check .",
-    "dev": "turbo dev --filter '@xframework/*'",
+    "dev": "turbo dev --filter '@xframework/*' --filter 'x' --concurrency 11",
     "lint": "biome check . --write --unsafe",
     "prepare": "husky",
-    "release": "turbo run build --filter '@xframework/*' && changeset publish",
+    "release": "turbo run build --filter '@xframework/*'  --filter 'x' && changeset publish",
     "test": "concurrently pnpm:test:*",
     "test:lint": "eslint --fix --max-warnings 0 .",
     "test:pretty": "prettier --write ."

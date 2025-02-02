@@ -1,0 +1,33 @@
+{
+  "name": "x",
+  "version": "0.3.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./adapter": {
+      "types": "./dist/adapter.d.ts",
+      "require": "./dist/adapter.cjs",
+      "import": "./dist/adapter.js"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4"
+  }
+}
