@@ -7,4 +7,8 @@ export class HonoAdapter extends SyncAdapter {
     super();
     this.app = app;
   }
+
+  export() {
+    return this.app;
+  }
 }

@@ -24,10 +24,11 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/node": "^20.11.24",
+    "tsd": "^0.31.2",
     "tsup": "^8.2.4",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vitest": "^3.0.4"
   }
 }

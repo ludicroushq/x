@@ -23,7 +23,7 @@
     "x": "workspace:*"
   },
   "peerDependencies": {
-    "hono": "^4.0.0"
+    "hono": ">=4.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",

@@ -1,63 +1,96 @@
 import type { AsyncAdapter, SyncAdapter } from "../adapter";
-import type { AsyncFactory, SyncFactory } from "../types/factory";
-import { BaseX } from "./base-x";
+import type {
+  AsyncFactory,
+  SyncFactory,
+  ExportedContainer,
+  AdapterContainer,
+} from "../types/factory";
+import { BaseFactory } from "./base-factory";
 
 /**
  * Synchronous factory implementation
  */
-export class SyncX<ContainerType> extends BaseX<ContainerType> {
-  syncAdapter<AdapterName extends string, AdapterInstance extends SyncAdapter>(
-    name: AdapterName,
-    factory: (container: ContainerType) => AdapterInstance,
-  ): SyncFactory<ContainerType & Record<AdapterName, AdapterInstance>> {
-    const adapters = this.cloneAdapters();
-    adapters.set(name, { factory });
-    return new SyncX<ContainerType & Record<AdapterName, AdapterInstance>>(
-      adapters,
-      { ...this.getSnapshot() } as ContainerType &
-        Record<AdapterName, AdapterInstance>,
-    ).build();
+export class SyncX<
+  TContainer extends AdapterContainer,
+> extends BaseFactory<TContainer> {
+  syncAdapter<TKey extends string, TAdapter extends SyncAdapter<T>, T = any>(
+    name: TKey,
+    factory: (container: ExportedContainer<TContainer>) => TAdapter,
+  ): SyncFactory<TContainer & Record<TKey, TAdapter>> {
+    const newInstance = new SyncX<TContainer & Record<TKey, TAdapter>>(
+      this.createAdapter(name, factory),
+    );
+    return newInstance.build();
   }
 
-  asyncAdapter<
-    AdapterName extends string,
-    AdapterInstance extends AsyncAdapter,
-  >(
-    name: AdapterName,
-    factory: (container: ContainerType) => AdapterInstance,
-  ): AsyncFactory<ContainerType & Record<AdapterName, AdapterInstance>> {
-    const adapters = this.cloneAdapters();
-    adapters.set(name, { factory });
-    return new AsyncX<ContainerType & Record<AdapterName, AdapterInstance>>(
-      adapters,
-      { ...this.getSnapshot() } as ContainerType &
-        Record<AdapterName, AdapterInstance>,
-    ).build();
+  asyncAdapter<TKey extends string, TAdapter extends AsyncAdapter<T>, T = any>(
+    name: TKey,
+    factory: (container: ExportedContainer<TContainer>) => TAdapter,
+  ): AsyncFactory<TContainer & Record<TKey, TAdapter>> {
+    const newInstance = new AsyncX<TContainer & Record<TKey, TAdapter>>(
+      this.createAdapter(name, factory),
+    );
+    return newInstance.build();
   }
 
-  use<T>(other: SyncFactory<T>): SyncFactory<ContainerType & T> {
-    const combined = { ...this.getSnapshot(), ...other } as ContainerType & T;
-    return new SyncX<ContainerType & T>(this.cloneAdapters(), combined).build();
+  use<T extends AdapterContainer>(
+    other: SyncFactory<T>,
+  ): SyncFactory<TContainer & T>;
+  use<T extends AdapterContainer>(
+    other: AsyncFactory<T>,
+  ): AsyncFactory<TContainer & T>;
+  use<T extends AdapterContainer>(
+    other: SyncFactory<T> | AsyncFactory<T>,
+  ): SyncFactory<TContainer & T> | AsyncFactory<TContainer & T> {
+    if (other instanceof Promise) {
+      const asyncResult = (async () => {
+        const otherResolved = await other;
+        const newInstance = new AsyncX<TContainer & T>(
+          this.mergeAdapters(otherResolved),
+        );
+        return await newInstance.build();
+      })();
+
+      const asyncFactory = asyncResult as AsyncFactory<TContainer & T>;
+      this.bindFactoryMethods(
+        asyncFactory,
+        new AsyncX<TContainer & T>(this.cloneAdapters()),
+      );
+      return asyncFactory;
+    }
+
+    // Handle sync factory case
+    const newInstance = new SyncX<TContainer & T>(this.mergeAdapters(other));
+    return newInstance.build();
   }
 
-  build(): SyncFactory<ContainerType> {
-    const factory = this.getSnapshot() as SyncFactory<ContainerType>;
+  build(): SyncFactory<TContainer> {
+    const factory = this.createSnapshot() as any as SyncFactory<TContainer>;
+    const initializedAdapters = new Set<string>();
 
+    // Initialize sync adapters in order
     for (const [name, adapter] of this.adapters) {
+      if (initializedAdapters.has(name) || adapter.initialized) continue;
+
       const instance = adapter.instance;
-      if (instance?.init) {
+      if (
+        instance &&
+        typeof instance === "object" &&
+        "init" in instance &&
+        typeof instance.init === "function"
+      ) {
         const result = instance.init();
         if (result instanceof Promise) {
           throw new Error(
             `Adapter "${name}" returned a Promise from init() in a sync factory`,
           );
         }
+        initializedAdapters.add(name);
+        adapter.initialized = true;
       }
     }
 
-    factory.syncAdapter = this.syncAdapter.bind(this);
-    factory.asyncAdapter = this.asyncAdapter.bind(this);
-    factory.use = this.use.bind(this);
+    this.bindFactoryMethods(factory, this);
     return factory;
   }
 }
@@ -65,105 +98,55 @@ export class SyncX<ContainerType> extends BaseX<ContainerType> {
 /**
  * Asynchronous factory implementation
  */
-export class AsyncX<ContainerType> extends BaseX<ContainerType> {
-  syncAdapter<AdapterName extends string, AdapterInstance extends SyncAdapter>(
-    name: AdapterName,
-    factory: (container: ContainerType) => AdapterInstance,
-  ): AsyncFactory<ContainerType & Record<AdapterName, AdapterInstance>> {
-    const adapters = this.cloneAdapters();
-    adapters.set(name, { factory });
-    const newInstance = new AsyncX<
-      ContainerType & Record<AdapterName, AdapterInstance>
-    >(adapters, { ...this.getSnapshot() } as ContainerType &
-      Record<AdapterName, AdapterInstance>);
+export class AsyncX<
+  TContainer extends AdapterContainer,
+> extends BaseFactory<TContainer> {
+  syncAdapter<TKey extends string, TAdapter extends SyncAdapter<T>, T = any>(
+    name: TKey,
+    factory: (container: ExportedContainer<TContainer>) => TAdapter,
+  ): AsyncFactory<TContainer & Record<TKey, TAdapter>> {
+    const newInstance = new AsyncX<TContainer & Record<TKey, TAdapter>>(
+      this.createAdapter(name, factory),
+    );
     return newInstance.build();
   }
 
-  asyncAdapter<
-    AdapterName extends string,
-    AdapterInstance extends AsyncAdapter,
-  >(
-    name: AdapterName,
-    factory: (container: ContainerType) => AdapterInstance,
-  ): AsyncFactory<ContainerType & Record<AdapterName, AdapterInstance>> {
-    const adapters = this.cloneAdapters();
-    adapters.set(name, { factory });
-    const newInstance = new AsyncX<
-      ContainerType & Record<AdapterName, AdapterInstance>
-    >(adapters, { ...this.getSnapshot() } as ContainerType &
-      Record<AdapterName, AdapterInstance>);
+  asyncAdapter<TKey extends string, TAdapter extends AsyncAdapter<T>, T = any>(
+    name: TKey,
+    factory: (container: ExportedContainer<TContainer>) => TAdapter,
+  ): AsyncFactory<TContainer & Record<TKey, TAdapter>> {
+    const newInstance = new AsyncX<TContainer & Record<TKey, TAdapter>>(
+      this.createAdapter(name, factory),
+    );
     return newInstance.build();
   }
 
-  use<T>(
+  use<T extends AdapterContainer>(
     other: SyncFactory<T> | AsyncFactory<T>,
-  ): AsyncFactory<ContainerType & T> {
+  ): AsyncFactory<TContainer & T> {
     const newPromise = (async () => {
       const otherResolved = other instanceof Promise ? await other : other;
-      const combined = {
-        ...this.getSnapshot(),
-        ...otherResolved,
-      } as ContainerType & T;
-      const newInstance = new AsyncX<ContainerType & T>(
-        this.cloneAdapters(),
-        combined,
+      const newInstance = new AsyncX<TContainer & T>(
+        this.mergeAdapters(otherResolved),
       );
-      const result = await newInstance.build();
-      return result;
+      return await newInstance.build();
     })();
 
-    const asyncFactory = newPromise as AsyncFactory<ContainerType & T>;
-
-    asyncFactory.syncAdapter = <AN extends string, AI extends SyncAdapter>(
-      name: AN,
-      factory: (container: ContainerType & T) => AI,
-    ) => {
-      return this.syncAdapter(name, ((container: ContainerType) => {
-        return factory(container as ContainerType & T);
-      }) as any) as AsyncFactory<(ContainerType & T) & Record<AN, AI>>;
-    };
-
-    asyncFactory.asyncAdapter = <AN extends string, AI extends AsyncAdapter>(
-      name: AN,
-      factory: (container: ContainerType & T) => AI,
-    ) => {
-      return this.asyncAdapter(name, ((container: ContainerType) => {
-        return factory(container as ContainerType & T);
-      }) as any) as AsyncFactory<(ContainerType & T) & Record<AN, AI>>;
-    };
-
-    asyncFactory.use = <NT>(other: SyncFactory<NT> | AsyncFactory<NT>) => {
-      return this.use(other) as AsyncFactory<(ContainerType & T) & NT>;
-    };
-
+    const asyncFactory = newPromise as AsyncFactory<TContainer & T>;
+    this.bindFactoryMethods(
+      asyncFactory,
+      new AsyncX<TContainer & T>(this.cloneAdapters()),
+    );
     return asyncFactory;
   }
 
-  build(): AsyncFactory<ContainerType> {
+  build(): AsyncFactory<TContainer> {
     const promise = (async () => {
-      return await this.buildFactory();
+      return await this.createFactory();
     })();
 
-    const asyncFactory = promise as AsyncFactory<ContainerType>;
-
-    asyncFactory.syncAdapter = <AN extends string, AI extends SyncAdapter>(
-      name: AN,
-      factory: (container: ContainerType) => AI,
-    ) => {
-      return this.syncAdapter(name, factory);
-    };
-
-    asyncFactory.asyncAdapter = <AN extends string, AI extends AsyncAdapter>(
-      name: AN,
-      factory: (container: ContainerType) => AI,
-    ) => {
-      return this.asyncAdapter(name, factory);
-    };
-
-    asyncFactory.use = <T>(other: SyncFactory<T> | AsyncFactory<T>) => {
-      return this.use(other);
-    };
-
+    const asyncFactory = promise as AsyncFactory<TContainer>;
+    this.bindFactoryMethods(asyncFactory, this);
     return asyncFactory;
   }
 }
