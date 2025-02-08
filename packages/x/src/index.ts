@@ -1,12 +1,5 @@
-import type { SyncFactory, AdapterContainer } from "./types/factory";
-import { SyncX } from "./core/factories";
+import { X } from "./core/core";
 
-/**
- * Creates a new synchronous factory instance.
- * Use .use() to compose with other factories.
- */
-export function createX<
-  TContainer extends AdapterContainer = {},
->(): SyncFactory<TContainer> {
-  return new SyncX<TContainer>(new Map()).build();
+export function createX() {
+  return new X();
 }
