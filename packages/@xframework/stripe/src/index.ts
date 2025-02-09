@@ -1,15 +1,48 @@
+import type Stripe from "stripe";
 import { SyncAdapter } from "x/adapter";
 
 export class StripeAdapter<
   UserStripeInstance extends Stripe,
-> extends SyncAdapter<UserStripeInstance> {
-  public app: UserStripeInstance;
-  constructor({ app }: { app: UserStripeInstance, deps: { hono?: } }) {
+> extends SyncAdapter<{
+  client: UserStripeInstance;
+}> {
+  public client: UserStripeInstance;
+  private webhookSecret: string;
+
+  constructor({
+    client,
+    webhookSecret,
+  }: {
+    client: UserStripeInstance;
+    webhookSecret: string;
+  }) {
     super();
-    this.app = app;
+    this.client = client;
+    this.webhookSecret = webhookSecret;
+  }
+
+  async handleWebhookRequest(request: Request) {
+    const headers = request.headers;
+    const body = await request.text();
+
+    const signature = headers.get("stripe-signature");
+
+    if (!signature) {
+      throw new Error("missing stripe-signature");
+    }
+
+    const event = this.client.webhooks.constructEvent(
+      body,
+      signature,
+      this.webhookSecret,
+    );
+
+    return event;
   }
 
   export() {
-    return this.app;
+    return {
+      client: this.client,
+    };
   }
 }

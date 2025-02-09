@@ -3,11 +3,14 @@ import { SyncAdapter } from "x/adapter";
 export class T3EnvAdapter<
   T extends Record<string, unknown>,
 > extends SyncAdapter<T> {
-  constructor(private config: { env: T }) {
+  public env: T;
+
+  constructor({ env }: { env: T }) {
     super();
+    this.env = env;
   }
 
   export() {
-    return this.config.env;
+    return this.env;
   }
 }

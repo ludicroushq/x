@@ -4,13 +4,13 @@ import { SyncAdapter } from "x/adapter";
 export class HonoAdapter<
   UserHonoInstance extends Hono,
 > extends SyncAdapter<UserHonoInstance> {
-  public app: UserHonoInstance;
-  constructor({ app }: { app: UserHonoInstance }) {
+  public hono: UserHonoInstance;
+  constructor({ hono }: { hono: UserHonoInstance }) {
     super();
-    this.app = app;
+    this.hono = hono;
   }
 
   export() {
-    return this.app;
+    return this.hono;
   }
 }

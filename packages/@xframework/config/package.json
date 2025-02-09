@@ -1,5 +1,5 @@
 {
-  "name": "@xframework/stripe",
+  "name": "package",
   "version": "0.0.0",
   "type": "module",
   "exports": {
@@ -22,9 +22,7 @@
   "dependencies": {
     "x": "workspace:*"
   },
-  "peerDependencies": {
-    "stripe": ">=17.0.0"
-  },
+  "peerDependencies": {},
   "devDependencies": {
     "@types/node": "^20.11.24",
     "tsup": "^8.2.4",

@@ -6,21 +6,22 @@ import { hc } from "hono/client";
 
 describe("HonoAdapter", () => {
   it("should properly initialize and export Hono instance", () => {
-    const app = new Hono();
-    const adapter = new HonoAdapter({ app });
+    const hono = new Hono();
+    const adapter = new HonoAdapter({ hono });
 
-    expect(adapter.app).toBe(app);
-    expect(adapter.export()).toBe(app);
+    expect(adapter.hono).toBe(hono);
+    expect(adapter.export()).toBe(hono);
   });
 
   it("should preserve Hono types and route handlers", () => {
-    const app = new Hono().get("/hello/:name", (c) => {
+    const hono = new Hono().get("/hello/:name", (c) => {
       const name = c.req.param("name");
       return c.json({ message: `Hello ${name}!` });
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const x = createX()
-      .syncAdapter("hono", () => new HonoAdapter({ app }))
+      .syncAdapter("hono", () => new HonoAdapter({ hono }))
       .build();
 
     type AppType = typeof x.hono;
@@ -29,14 +30,12 @@ describe("HonoAdapter", () => {
   });
 
   it("should work with middleware and complex routes", () => {
-    const app = new Hono();
-
-    // Add routes with different methods and params
-    app.get("/api/users/:id", (c) => c.json({ id: c.req.param("id") }));
-    app.post("/api/users", (c) => c.json({ status: "created" }));
+    const hono = new Hono()
+      .get("/api/users/:id", (c) => c.json({ id: c.req.param("id") }))
+      .post("/api/users", (c) => c.json({ status: "created" }));
 
     const x = createX()
-      .syncAdapter("hono", () => new HonoAdapter({ app }))
+      .syncAdapter("hono", () => new HonoAdapter({ hono }))
       .build();
 
     expect(x.hono.routes).toHaveLength(2);
