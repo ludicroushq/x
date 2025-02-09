@@ -1,16 +1,17 @@
-import type { AsyncAdapterType, SyncAdapterType } from "./types";
+import type { SyncAdapterType, AsyncAdapterType } from "./types";
 
-// Base classes for adapter developers
-export abstract class SyncAdapter<T> implements SyncAdapterType<T> {
+export abstract class SyncAdapter<TExport> implements SyncAdapterType<TExport> {
   readonly __type = "sync" as const;
   init?(): void;
-  abstract export(): T;
+  abstract export(): TExport;
 }
 
-export abstract class AsyncAdapter<T> implements AsyncAdapterType<T> {
+export abstract class AsyncAdapter<TExport>
+  implements AsyncAdapterType<TExport>
+{
   readonly __type = "async" as const;
   init?(): Promise<void>;
-  abstract export(): T;
+  abstract export(): TExport;
 }
 
 export class AdapterError extends Error {

@@ -1,74 +1,47 @@
-// Base types for sync and async adapters
-export type SyncAdapterType<T = any> = {
+// Core adapter type definitions
+export type SyncAdapterType<TExport = unknown> = {
   __type: "sync";
   init?(): void;
-  export(): T;
+  export(): TExport;
 };
 
-export type AsyncAdapterType<T = any> = {
+export type AsyncAdapterType<TExport = unknown> = {
   __type: "async";
   init?(): Promise<void>;
-  export(): T;
+  export(): TExport;
 };
 
-export type AdapterType = SyncAdapterType | AsyncAdapterType;
-export type AdapterContainer = Record<string, AdapterType>;
+export type AnyAdapter = SyncAdapterType | AsyncAdapterType;
+export type AdapterRegistry = Record<string, AnyAdapter>;
 
 // Helper type to extract the exported type from an adapter
-export type ExtractExport<T> = T extends
-  | SyncAdapterType<infer E>
-  | AsyncAdapterType<infer E>
-  ? E
+export type ExportType<TAdapter> = TAdapter extends
+  | SyncAdapterType<infer TExport>
+  | AsyncAdapterType<infer TExport>
+  ? TExport
   : never;
 
-// Result type with _ container
-export type Result<T extends AdapterContainer> = {
-  [K in keyof T]: ExtractExport<T[K]>;
+// Result type with metadata container
+export type AdapterResult<TAdapters extends AdapterRegistry> = {
+  [Key in keyof TAdapters]: ExportType<TAdapters[Key]>;
 } & {
   _: {
-    adapters: T;
+    adapters: TAdapters;
   };
 };
 
-export type BuildResult<
-  T extends AdapterContainer,
-  IsAsync extends boolean,
-> = IsAsync extends true ? Promise<Result<T>> : Result<T>;
+export type BuildOutput<
+  TAdapters extends AdapterRegistry,
+  TIsAsync extends boolean,
+> = TIsAsync extends true
+  ? Promise<AdapterResult<TAdapters>>
+  : AdapterResult<TAdapters>;
 
-// New types for adapter configuration
-export type NoConfigConstructor<T> = new () =>
-  | SyncAdapterType<T>
-  | AsyncAdapterType<T>;
-export type ConfigConstructor<T, C> = new (
-  config: C,
-) => SyncAdapterType<T> | AsyncAdapterType<T>;
+// Factory types
+export type SyncAdapterCreator<TExport, TDeps extends AdapterRegistry> = (
+  dependencies: AdapterResult<TDeps>,
+) => SyncAdapterType<TExport>;
 
-export type AdapterClass<T, C = void> = C extends void
-  ? NoConfigConstructor<T>
-  : ConfigConstructor<T, C>;
-
-export type SyncAdapterConfig<
-  K extends string,
-  T,
-  C = void,
-  D extends AdapterContainer = {},
-> = C extends void
-  ? { name: K; adapter: NoConfigConstructor<T>; config?: never }
-  : {
-      name: K;
-      adapter: ConfigConstructor<T, C>;
-      config: (dependencies: Result<D>) => C;
-    };
-
-export type AsyncAdapterConfig<
-  K extends string,
-  T,
-  C = void,
-  D extends AdapterContainer = {},
-> = C extends void
-  ? { name: K; adapter: NoConfigConstructor<T>; config?: never }
-  : {
-      name: K;
-      adapter: ConfigConstructor<T, C>;
-      config: (dependencies: Result<D>) => C;
-    };
+export type AsyncAdapterCreator<TExport, TDeps extends AdapterRegistry> = (
+  dependencies: AdapterResult<TDeps>,
+) => Promise<AsyncAdapterType<TExport>> | AsyncAdapterType<TExport>;
