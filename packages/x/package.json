@@ -22,16 +22,12 @@
   },
   "scripts": {
     "build": "tsup",
-    "ci:test": "vitest --run --coverage",
-    "dev": "tsup --watch",
-    "test": "vitest --coverage"
+    "dev": "tsup --watch"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
-    "@vitest/coverage-v8": "3.0.4",
     "tsd": "^0.31.2",
     "tsup": "^8.2.4",
-    "typescript": "^5.5.4",
-    "vitest": "^3.0.4"
+    "typescript": "^5.5.4"
   }
 }

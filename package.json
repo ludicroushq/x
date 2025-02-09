@@ -7,15 +7,18 @@
     "ci:test": "concurrently pnpm:ci:test:* && turbo run ci:test",
     "ci:test:lint": "eslint --max-warnings 0 .",
     "ci:test:pretty": "prettier --check .",
+    "ci:test:vitest": "vitest --run --coverage",
     "dev": "turbo dev --filter '@xframework/*' --filter 'x' --concurrency 11",
     "lint": "biome check . --write --unsafe",
     "prepare": "husky",
     "release": "turbo run build --filter '@xframework/*'  --filter 'x' && changeset publish",
     "test": "concurrently pnpm:test:* && turbo run test",
     "test:lint": "eslint --fix --max-warnings 0 .",
-    "test:pretty": "prettier --write ."
+    "test:pretty": "prettier --write .",
+    "test:vitest": "vitest --run --coverage"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^3.0.5",
     "concurrently": "^9.1.2",
     "eslint": "^9.18.0",
     "husky": "^9.1.7",
@@ -24,7 +27,8 @@
     "prettier": "^3.4.2",
     "tsup": "^8.2.4",
     "turbo": "^2.0.14",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vitest": "^3.0.5"
   },
   "dependencies": {
     "@changesets/cli": "^2.27.7"
