@@ -65,4 +65,24 @@ describe("Async Adapter Tests", () => {
         .build(),
     ).rejects.toThrow("Async init error");
   });
+
+  it("should call init method on async adapter", async () => {
+    let initCalled = false;
+
+    class TestAsyncAdapter extends AsyncAdapter<string> {
+      async init() {
+        initCalled = true;
+      }
+
+      export() {
+        return "test";
+      }
+    }
+
+    await createX()
+      .asyncAdapter("test", () => new TestAsyncAdapter())
+      .build();
+
+    expect(initCalled).toBe(true);
+  });
 });

@@ -60,4 +60,24 @@ describe("Sync Adapter Tests", () => {
         .build(),
     ).toThrow("Init error");
   });
+
+  it("should call init method on sync adapter", () => {
+    let initCalled = false;
+
+    class TestSyncAdapter extends SyncAdapter<string> {
+      init() {
+        initCalled = true;
+      }
+
+      export() {
+        return "test";
+      }
+    }
+
+    createX()
+      .syncAdapter("test", () => new TestSyncAdapter())
+      .build();
+
+    expect(initCalled).toBe(true);
+  });
 });
