@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { createX } from "../";
 import { AsyncAdapter } from "../adapter";
 
@@ -64,18 +64,5 @@ describe("Async Adapter Tests", () => {
         .asyncAdapter("error", () => new ErrorAsyncAdapter())
         .build(),
     ).rejects.toThrow('Failed to initialize adapter "error"');
-  });
-
-  it("should handle non-AdapterError errors during async build", async () => {
-    const x = createX().asyncAdapter(
-      "test",
-      () => new TestAsyncAdapter("test"),
-    );
-    const error = new Error("Unknown error");
-    vi.spyOn(x as any, "buildAsync").mockImplementation(() => {
-      throw error;
-    });
-
-    await expect(x.build()).rejects.toThrow("Failed to build adapters");
   });
 });

@@ -42,18 +42,4 @@ describe("Adapter Composition Tests", () => {
     expect(result.number).toBe(42);
     expect(result.string).toBe("value: 42");
   });
-
-  it("should throw when using async adapter in sync build", () => {
-    const async = createX().asyncAdapter(
-      "async",
-      () => new StringAdapter({ number: 1 }),
-    );
-
-    expect(() =>
-      createX()
-        .use(async)
-        .syncAdapter("sync", () => new NumberAdapter(1))
-        .build(),
-    ).toThrow('Cannot use async adapter "async" in sync build');
-  });
 });

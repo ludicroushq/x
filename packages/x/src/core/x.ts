@@ -83,9 +83,8 @@ class X<
 
           // @ts-expect-error this should never happen with typescript
           if (adapter.__type === "async") {
-            throw new AdapterError(
+            throw new Error(
               `Factory returned async adapter "${key}" in sync build`,
-              key,
             );
           }
 
@@ -94,7 +93,7 @@ class X<
           (result as any)[key] = adapter.export();
         } catch (error) {
           throw new AdapterError(
-            `Failed to initialize adapter "${key}"`,
+            `Failed to initialize adapter "${key}": ${error}`,
             key,
             error,
           );

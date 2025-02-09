@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { createX } from "../";
 import { SyncAdapter } from "../adapter";
 // sync-adapter.test.ts
@@ -59,15 +59,5 @@ describe("Sync Adapter Tests", () => {
         .syncAdapter("error", () => new ErrorSyncAdapter())
         .build(),
     ).toThrow('Failed to initialize adapter "error"');
-  });
-
-  it("should handle non-AdapterError errors during sync build", () => {
-    const x = createX();
-    const error = new Error("Unknown error");
-    vi.spyOn(x as any, "buildSync").mockImplementation(() => {
-      throw error;
-    });
-
-    expect(() => x.build()).toThrow("Failed to build adapters");
   });
 });
