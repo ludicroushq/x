@@ -63,6 +63,6 @@ describe("Async Adapter Tests", () => {
       createX()
         .asyncAdapter("error", () => new ErrorAsyncAdapter())
         .build(),
-    ).rejects.toThrow('Failed to initialize adapter "error"');
+    ).rejects.toThrow("Async init error");
   });
 });

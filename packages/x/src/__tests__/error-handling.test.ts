@@ -11,7 +11,7 @@ describe("Error Handling Tests", () => {
           throw new Error("Factory error");
         })
         .build(),
-    ).toThrow('Failed to initialize adapter "error"');
+    ).toThrow("Factory error");
   });
 
   it("should handle asynchronous factory errors", async () => {
@@ -21,7 +21,7 @@ describe("Error Handling Tests", () => {
           throw new Error("Async factory error");
         })
         .build(),
-    ).rejects.toThrow('Failed to initialize adapter "error"');
+    ).rejects.toThrow("Async factory error");
   });
 
   it("should handle export errors in sync adapters", () => {
@@ -36,7 +36,7 @@ describe("Error Handling Tests", () => {
       createX()
         .syncAdapter("error", () => new ExportErrorAdapter())
         .build(),
-    ).toThrow('Failed to initialize adapter "error"');
+    ).toThrow("Export error");
   });
 
   it("should handle export errors in async adapters", async () => {
@@ -51,7 +51,7 @@ describe("Error Handling Tests", () => {
       createX()
         .asyncAdapter("error", () => new AsyncExportErrorAdapter())
         .build(),
-    ).rejects.toThrow('Failed to initialize adapter "error"');
+    ).rejects.toThrow("Async export error");
   });
 
   it("should handle async adapter returned in sync context", () => {

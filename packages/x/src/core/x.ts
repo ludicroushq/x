@@ -65,48 +65,32 @@ class X<
       _: { adapters: {} as TAdapters },
     } as AdapterResult<TAdapters>;
 
-    try {
-      for (const [key, [factory, isAsync]] of Object.entries(
-        this.adapterFactories,
-      )) {
-        if (isAsync) {
-          throw new AdapterError(
-            `Cannot use async adapter "${key}" in sync build`,
-            key,
-          );
-        }
-
-        try {
-          const adapter = (factory as SyncAdapterCreator<any, TAdapters>)(
-            result,
-          );
-
-          // @ts-expect-error this should never happen with typescript
-          if (adapter.__type === "async") {
-            throw new Error(
-              `Factory returned async adapter "${key}" in sync build`,
-            );
-          }
-
-          (result._.adapters as any)[key] = adapter;
-          adapter.init?.();
-          (result as any)[key] = adapter.export();
-        } catch (error) {
-          throw new AdapterError(
-            `Failed to initialize adapter "${key}": ${error}`,
-            key,
-            error,
-          );
-        }
+    for (const [key, [factory, isAsync]] of Object.entries(
+      this.adapterFactories,
+    )) {
+      if (isAsync) {
+        throw new AdapterError(
+          `Cannot use async adapter "${key}" in sync build`,
+          key,
+        );
       }
 
-      return result;
-    } catch (error) {
-      if (error instanceof AdapterError) {
-        throw error;
+      const adapter = (factory as SyncAdapterCreator<any, TAdapters>)(result);
+
+      // @ts-expect-error this should never happen with typescript
+      if (adapter.__type === "async") {
+        throw new AdapterError(
+          `Factory returned async adapter "${key}" in sync build`,
+          key,
+        );
       }
-      throw new AdapterError("Failed to build adapters", "", error);
+
+      (result._.adapters as any)[key] = adapter;
+      adapter.init?.();
+      (result as any)[key] = adapter.export();
     }
+
+    return result;
   }
 
   private async buildAsync(): Promise<AdapterResult<TAdapters>> {
@@ -114,41 +98,24 @@ class X<
       _: { adapters: {} as TAdapters },
     } as AdapterResult<TAdapters>;
 
-    try {
-      for (const [key, [factory, isAsync]] of Object.entries(
-        this.adapterFactories,
-      )) {
-        try {
-          const currentResult = { ...result };
-          const adapter = isAsync
-            ? await (factory as AsyncAdapterCreator<any, TAdapters>)(
-                currentResult,
-              )
-            : (factory as SyncAdapterCreator<any, TAdapters>)(currentResult);
+    for (const [key, [factory, isAsync]] of Object.entries(
+      this.adapterFactories,
+    )) {
+      const currentResult = { ...result };
+      const adapter = isAsync
+        ? await (factory as AsyncAdapterCreator<any, TAdapters>)(currentResult)
+        : (factory as SyncAdapterCreator<any, TAdapters>)(currentResult);
 
-          (result._.adapters as any)[key] = adapter;
+      (result._.adapters as any)[key] = adapter;
 
-          if (adapter.init) {
-            adapter.__type === "async" ? await adapter.init() : adapter.init();
-          }
-
-          (result as any)[key] = adapter.export();
-        } catch (error) {
-          throw new AdapterError(
-            `Failed to initialize adapter "${key}"`,
-            key,
-            error,
-          );
-        }
+      if (adapter.init) {
+        adapter.__type === "async" ? await adapter.init() : adapter.init();
       }
 
-      return result;
-    } catch (error) {
-      if (error instanceof AdapterError) {
-        throw error;
-      }
-      throw new AdapterError("Failed to build adapters", "", error);
+      (result as any)[key] = adapter.export();
     }
+
+    return result;
   }
 }
 

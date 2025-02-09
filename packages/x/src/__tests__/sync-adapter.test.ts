@@ -58,6 +58,6 @@ describe("Sync Adapter Tests", () => {
       createX()
         .syncAdapter("error", () => new ErrorSyncAdapter())
         .build(),
-    ).toThrow('Failed to initialize adapter "error"');
+    ).toThrow("Init error");
   });
 });
