@@ -1,0 +1,35 @@
+{
+  "name": "@xframework/better-auth",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "require": "./dist/client.cjs",
+      "import": "./dist/client.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "require": "./dist/server.cjs",
+      "import": "./dist/server.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@xframework/x": "workspace:*"
+  },
+  "peerDependencies": {
+    "better-auth": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4"
+  }
+}
