@@ -9,7 +9,6 @@
     "ci:test:pretty": "prettier --check .",
     "ci:test:vitest": "vitest --run --coverage",
     "dev": "turbo dev --filter '@xframework/*' --concurrency 11",
-    "lint": "eslint --fix --max-warnings 0 .",
     "prepare": "husky",
     "release": "turbo run build --filter '@xframework/*' && changeset publish",
     "test": "concurrently pnpm:test:* && turbo run test",
