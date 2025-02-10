@@ -9,15 +9,19 @@ import type {
   BuildOutput,
 } from "./types";
 
+type AdapterFactory<T extends AdapterRegistry> =
+  | [(deps: AdapterResult<T>) => SyncAdapterType<unknown>, false]
+  | [(deps: AdapterResult<T>) => Promise<AsyncAdapterType<unknown>>, true];
+
 class X<
-  TAdapters extends AdapterRegistry = {},
+  TAdapters extends AdapterRegistry = Record<string, never>,
   TIsAsync extends boolean = false,
 > {
   constructor(
     private readonly adapterFactories: Record<
       string,
-      [(deps: any) => any, boolean]
-    > = {},
+      AdapterFactory<TAdapters>
+    > = {} as Record<string, AdapterFactory<TAdapters>>,
     private readonly isAsync: TIsAsync = false as TIsAsync,
   ) {}
 
@@ -25,32 +29,43 @@ class X<
     name: TKey,
     factory: SyncAdapterCreator<TExport, TAdapters>,
   ): X<TAdapters & Record<TKey, SyncAdapterType<TExport>>, TIsAsync> {
+    type NewAdapters = TAdapters & Record<TKey, SyncAdapterType<TExport>>;
     const newFactories = { ...this.adapterFactories };
-    newFactories[name] = [factory, false];
-    return new X(newFactories, this.isAsync);
+    // We know this is safe because factory is a SyncAdapterCreator
+    (newFactories as any)[name] = [factory, false];
+    return new X(
+      newFactories as Record<string, AdapterFactory<NewAdapters>>,
+      this.isAsync,
+    );
   }
 
   asyncAdapter<TKey extends string, TExport>(
     name: TKey,
     factory: AsyncAdapterCreator<TExport, TAdapters>,
   ): X<TAdapters & Record<TKey, AsyncAdapterType<TExport>>, true> {
+    type NewAdapters = TAdapters & Record<TKey, AsyncAdapterType<TExport>>;
     const wrappedFactory = async (deps: AdapterResult<TAdapters>) => {
       const result = factory(deps);
       return result instanceof Promise ? await result : result;
     };
 
     const newFactories = { ...this.adapterFactories };
-    newFactories[name] = [wrappedFactory, true];
-    return new X(newFactories, true);
+    // We know this is safe because wrappedFactory returns a Promise<AsyncAdapterType>
+    (newFactories as any)[name] = [wrappedFactory, true];
+    return new X(
+      newFactories as Record<string, AdapterFactory<NewAdapters>>,
+      true,
+    );
   }
 
   use<TOtherAdapters extends AdapterRegistry, TOtherAsync extends boolean>(
     other: X<TOtherAdapters, TOtherAsync>,
   ): X<TAdapters & TOtherAdapters, TIsAsync | TOtherAsync> {
+    type CombinedAdapters = TAdapters & TOtherAdapters;
     const newFactories = {
       ...this.adapterFactories,
       ...other["adapterFactories"],
-    };
+    } as Record<string, AdapterFactory<CombinedAdapters>>;
     return new X(newFactories, this.isAsync || other["isAsync"]);
   }
 
@@ -75,19 +90,19 @@ class X<
         );
       }
 
-      const adapter = (factory as SyncAdapterCreator<any, TAdapters>)(result);
+      const adapter = factory(result) as SyncAdapterType<unknown>;
 
-      // @ts-expect-error this should never happen with typescript
-      if (adapter.__type === "async") {
+      if (adapter.__type !== "sync") {
         throw new AdapterError(
           `Factory returned async adapter "${key}" in sync build`,
           key,
         );
       }
 
-      (result._.adapters as any)[key] = adapter;
+      (result._.adapters as Record<string, SyncAdapterType<unknown>>)[key] =
+        adapter;
       adapter.init?.();
-      (result as any)[key] = adapter.export();
+      (result as Record<string, unknown>)[key] = adapter.export();
     }
 
     return result;
@@ -103,16 +118,33 @@ class X<
     )) {
       const currentResult = { ...result };
       const adapter = isAsync
-        ? await (factory as AsyncAdapterCreator<any, TAdapters>)(currentResult)
-        : (factory as SyncAdapterCreator<any, TAdapters>)(currentResult);
+        ? await (
+            factory as (
+              deps: AdapterResult<TAdapters>,
+            ) => Promise<AsyncAdapterType<unknown>>
+          )(currentResult)
+        : (
+            factory as (
+              deps: AdapterResult<TAdapters>,
+            ) => SyncAdapterType<unknown>
+          )(currentResult);
 
-      (result._.adapters as any)[key] = adapter;
+      (
+        result._.adapters as Record<
+          string,
+          SyncAdapterType<unknown> | AsyncAdapterType<unknown>
+        >
+      )[key] = adapter;
 
       if (adapter.init) {
-        adapter.__type === "async" ? await adapter.init() : adapter.init();
+        if (adapter.__type === "async") {
+          await adapter.init();
+        } else {
+          adapter.init();
+        }
       }
 
-      (result as any)[key] =
+      (result as Record<string, unknown>)[key] =
         adapter.__type === "async" ? await adapter.export() : adapter.export();
     }
 
