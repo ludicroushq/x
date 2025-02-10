@@ -10,17 +10,16 @@ import type {
 } from "./types";
 
 class X<
-  TAdapters extends AdapterRegistry = Record<string, never>,
+  TAdapters extends AdapterRegistry = {},
   TIsAsync extends boolean = false,
 > {
   constructor(
     private readonly adapterFactories: Record<
       string,
-      [(deps: AdapterResult<TAdapters>) => SyncAdapterType | AsyncAdapterType, boolean]
+      [(deps: any) => any, boolean]
     > = {},
     private readonly isAsync: TIsAsync = false as TIsAsync,
   ) {}
-}
 
   syncAdapter<TKey extends string, TExport>(
     name: TKey,
