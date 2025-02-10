@@ -1,4 +1,4 @@
-import { SyncAdapter } from "x/adapter";
+import { SyncAdapter } from "@xframework/x/adapter";
 
 export class ConfigAdapter<
   UserConfigInstance extends Record<string, unknown>,

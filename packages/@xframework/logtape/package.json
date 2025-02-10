@@ -1,17 +1,12 @@
 {
-  "name": "x",
-  "version": "0.3.0",
+  "name": "@xframework/logtape",
+  "version": "0.0.0",
   "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.js"
-    },
-    "./adapter": {
-      "types": "./dist/adapter.d.ts",
-      "require": "./dist/adapter.cjs",
-      "import": "./dist/adapter.js"
     }
   },
   "main": "./dist/index.cjs",
@@ -24,9 +19,14 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
+  "dependencies": {
+    "@xframework/x": "workspace:*"
+  },
+  "peerDependencies": {
+    "@logtape/logtape": ">=0.8.0"
+  },
   "devDependencies": {
     "@types/node": "^20.11.24",
-    "tsd": "^0.31.2",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4"
   }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { AdapterError } from "../core/adapters";
-import { createX } from "../";
+import { createX } from "..";
 
 describe("Core Adapter Functionality", () => {
   it("should create an empty X instance", () => {

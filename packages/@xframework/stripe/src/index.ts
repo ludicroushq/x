@@ -1,5 +1,5 @@
 import type Stripe from "stripe";
-import { SyncAdapter } from "x/adapter";
+import { SyncAdapter } from "@xframework/x/adapter";
 
 export class StripeAdapter<
   UserStripeInstance extends Stripe,

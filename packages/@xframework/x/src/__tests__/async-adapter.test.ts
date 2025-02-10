@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createX } from "../";
+import { createX } from "..";
 import { AsyncAdapter } from "../adapter";
 
 // async-adapter.test.ts

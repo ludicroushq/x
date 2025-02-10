@@ -1,5 +1,5 @@
 import { expect, it, describe } from "vitest";
-import { createX } from "x";
+import { createX } from "@xframework/x";
 import { BetterAuthClientAdapter } from "../client";
 import { BetterAuthServerAdapter } from "../server";
 import type { createAuthClient } from "better-auth/client";

@@ -1,5 +1,5 @@
 import { expect, it, describe } from "vitest";
-import { createX } from "x";
+import { createX } from "@xframework/x";
 import { ConfigAdapter } from "../index";
 
 describe("ConfigAdapter", () => {

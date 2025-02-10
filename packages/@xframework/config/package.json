@@ -1,5 +1,5 @@
 {
-  "name": "package",
+  "name": "@xframework/config",
   "version": "0.0.0",
   "type": "module",
   "exports": {
@@ -20,7 +20,7 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "x": "workspace:*"
+    "@xframework/x": "workspace:*"
   },
   "peerDependencies": {},
   "devDependencies": {

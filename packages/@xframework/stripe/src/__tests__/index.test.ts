@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { expect, it, describe, vi } from "vitest";
-import { createX } from "x";
+import { createX } from "@xframework/x";
 import { StripeAdapter } from "../index";
 
 describe("StripeAdapter", () => {

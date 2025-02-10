@@ -22,7 +22,7 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "x": "workspace:*"
+    "@xframework/x": "workspace:*"
   },
   "peerDependencies": {
     "better-auth": ">=1.0.0"

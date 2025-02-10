@@ -1,3 +1,3 @@
-import { createX } from "x";
+import { createX } from "@xframework/x";
 
 export const x = createX();

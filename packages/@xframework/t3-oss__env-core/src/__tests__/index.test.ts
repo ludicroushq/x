@@ -2,7 +2,7 @@ import { createEnv } from "@t3-oss/env-core";
 import { createEnv as createNextEnv } from "@t3-oss/env-nextjs";
 import { createEnv as createNuxtEnv } from "@t3-oss/env-nuxt";
 import { expect, it } from "vitest";
-import { createX } from "x";
+import { createX } from "@xframework/x";
 import { z } from "zod";
 import { T3EnvAdapter } from "../index";
 

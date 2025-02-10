@@ -1,12 +1,17 @@
 {
-  "name": "@xframework/t3-oss__env-core",
-  "version": "0.0.0",
+  "name": "@xframework/x",
+  "version": "0.3.0",
   "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.js"
+    },
+    "./adapter": {
+      "types": "./dist/adapter.d.ts",
+      "require": "./dist/adapter.cjs",
+      "import": "./dist/adapter.js"
     }
   },
   "main": "./dist/index.cjs",
@@ -19,19 +24,10 @@
     "build": "tsup",
     "dev": "tsup --watch"
   },
-  "dependencies": {
-    "@xframework/x": "workspace:*"
-  },
-  "peerDependencies": {
-    "@t3-oss/env-core": ">=0.12.0"
-  },
   "devDependencies": {
-    "@t3-oss/env-core": "^0.12.0",
-    "@t3-oss/env-nextjs": "^0.12.0",
-    "@t3-oss/env-nuxt": "^0.12.0",
     "@types/node": "^20.11.24",
+    "tsd": "^0.31.2",
     "tsup": "^8.2.4",
-    "typescript": "^5.5.4",
-    "zod": "^3.22.4"
+    "typescript": "^5.5.4"
   }
 }

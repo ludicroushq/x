@@ -1,4 +1,4 @@
-import { SyncAdapter } from "x/adapter";
+import { SyncAdapter } from "@xframework/x/adapter";
 import type { betterAuth } from "better-auth";
 
 export class BetterAuthServerAdapter<

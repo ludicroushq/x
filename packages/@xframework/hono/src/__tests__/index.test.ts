@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { expect, it, describe } from "vitest";
-import { createX } from "x";
+import { createX } from "../../../x/dist";
 import { HonoAdapter } from "../index";
 import { hc } from "hono/client";
 

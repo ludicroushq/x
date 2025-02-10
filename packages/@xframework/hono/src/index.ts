@@ -1,5 +1,5 @@
 import type { Hono } from "hono";
-import { SyncAdapter } from "x/adapter";
+import { SyncAdapter } from "@xframework/x/adapter";
 
 export class HonoAdapter<
   UserHonoInstance extends Hono,

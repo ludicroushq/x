@@ -20,7 +20,7 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "x": "workspace:*"
+    "@xframework/x": "workspace:*"
   },
   "peerDependencies": {
     "hono": ">=4.0.0"

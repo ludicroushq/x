@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createX } from "../";
+import { createX } from "..";
 import { SyncAdapter } from "../adapter";
 // sync-adapter.test.ts
 describe("Sync Adapter Tests", () => {

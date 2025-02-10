@@ -14,7 +14,7 @@
     "next": "^15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "x": "workspace:*"
+    "@xframework/x": "workspace:*"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.11",
