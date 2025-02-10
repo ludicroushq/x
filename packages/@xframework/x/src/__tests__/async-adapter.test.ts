@@ -8,7 +8,7 @@ describe("Async Adapter Tests", () => {
     constructor(private value: string) {
       super();
     }
-    export() {
+    async export() {
       return this.value;
     }
   }
@@ -21,7 +21,7 @@ describe("Async Adapter Tests", () => {
       this.initialized = true;
     }
 
-    export() {
+    async export() {
       return this.initialized ? "initialized" : "not-initialized";
     }
   }
@@ -31,8 +31,7 @@ describe("Async Adapter Tests", () => {
       throw new Error("Async init error");
     }
 
-    // @ts-expect-error test
-    export() {
+    async export(): Promise<never> {
       throw new Error("Async export error");
     }
   }
@@ -74,7 +73,7 @@ describe("Async Adapter Tests", () => {
         initCalled = true;
       }
 
-      export() {
+      async export() {
         return "test";
       }
     }

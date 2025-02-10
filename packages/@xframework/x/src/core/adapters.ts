@@ -11,7 +11,7 @@ export abstract class AsyncAdapter<TExport>
 {
   readonly __type = "async" as const;
   init?(): Promise<void>;
-  abstract export(): TExport;
+  abstract export(): Promise<TExport>;
 }
 
 export class AdapterError extends Error {

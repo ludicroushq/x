@@ -17,7 +17,7 @@ describe("Adapter Composition Tests", () => {
     constructor(private deps: { number: number }) {
       super();
     }
-    export() {
+    async export() {
       return `value: ${this.deps.number}`;
     }
   }

@@ -8,7 +8,7 @@ export type SyncAdapterType<TExport = unknown> = {
 export type AsyncAdapterType<TExport = unknown> = {
   __type: "async";
   init?(): Promise<void>;
-  export(): TExport;
+  export(): Promise<TExport>;
 };
 
 export type AnyAdapter = SyncAdapterType | AsyncAdapterType;

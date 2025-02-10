@@ -112,7 +112,8 @@ class X<
         adapter.__type === "async" ? await adapter.init() : adapter.init();
       }
 
-      (result as any)[key] = adapter.export();
+      (result as any)[key] =
+        adapter.__type === "async" ? await adapter.export() : adapter.export();
     }
 
     return result;
