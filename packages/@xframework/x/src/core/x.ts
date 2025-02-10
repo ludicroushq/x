@@ -32,7 +32,10 @@ class X<
     type NewAdapters = TAdapters & Record<TKey, SyncAdapterType<TExport>>;
     const newFactories = { ...this.adapterFactories };
     // We know this is safe because factory is a SyncAdapterCreator
-    (newFactories as any)[name] = [factory, false];
+    (newFactories as Record<string, unknown>)[name] = [
+      factory,
+      false,
+    ] as AdapterFactory<NewAdapters>;
     return new X(
       newFactories as Record<string, AdapterFactory<NewAdapters>>,
       this.isAsync,
@@ -51,7 +54,10 @@ class X<
 
     const newFactories = { ...this.adapterFactories };
     // We know this is safe because wrappedFactory returns a Promise<AsyncAdapterType>
-    (newFactories as any)[name] = [wrappedFactory, true];
+    (newFactories as Record<string, unknown>)[name] = [
+      wrappedFactory,
+      true,
+    ] as AdapterFactory<NewAdapters>;
     return new X(
       newFactories as Record<string, AdapterFactory<NewAdapters>>,
       true,
