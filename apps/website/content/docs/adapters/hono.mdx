@@ -1,0 +1,91 @@
+---
+title: Hono Adapter
+description: Use Hono with X Framework for building fast, lightweight web applications
+---
+
+# Hono Adapter
+
+[Hono](https://hono.dev) is a small, simple, and ultrafast web framework for the Edge. The X Framework Hono adapter allows you to seamlessly integrate Hono into your application.
+
+## Installation
+
+```bash
+npm install @xframework/hono hono
+# or
+pnpm add @xframework/hono hono
+# or
+yarn add @xframework/hono hono
+```
+
+## Usage
+
+First, create your Hono instance:
+
+```ts
+import { Hono } from "hono";
+
+const app = new Hono();
+
+app.get("/", (c) => c.text("Hello X Framework!"));
+app.get("/users", (c) => c.json([{ id: 1, name: "John" }]));
+```
+
+Then integrate it with X Framework:
+
+```ts
+import { createX } from "@xframework/x";
+import { HonoAdapter } from "@xframework/hono";
+
+const x = createX()
+  .syncAdapter("hono", () => new HonoAdapter({ hono: app }))
+  .build();
+
+// Access your Hono instance
+const hono = x.hono;
+```
+
+## Type Safety
+
+The adapter preserves Hono's type information:
+
+```ts
+import { Hono } from "hono";
+
+type Bindings = {
+  DATABASE_URL: string;
+};
+
+const app = new Hono<{ Bindings: Bindings }>();
+
+const x = createX()
+  .syncAdapter("hono", () => new HonoAdapter({ hono: app }))
+  .build();
+
+// x.hono is fully typed with your bindings
+const db = x.hono.env.DATABASE_URL;
+```
+
+## Using with Other Adapters
+
+Hono works great with other X Framework adapters:
+
+```ts
+const x = createX()
+  .syncAdapter("hono", () => new HonoAdapter({ hono: app }))
+  .syncAdapter("auth", () => new BetterAuthAdapter(auth))
+  .syncAdapter("logger", () => new LogTapeAdapter(logger))
+  .build();
+
+// Use auth middleware
+x.hono.use("*", async (c, next) => {
+  const user = await x.auth.validateRequest(c.req.raw);
+  if (!user) return c.text("Unauthorized", 401);
+  await next();
+});
+
+// Log requests
+x.hono.use("*", async (c, next) => {
+  x.logger.info("Incoming request", { path: c.req.path });
+  await next();
+});
+```

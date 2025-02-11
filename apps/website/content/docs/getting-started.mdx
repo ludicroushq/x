@@ -1,0 +1,206 @@
+---
+title: Getting Started
+description: Build your first X Framework application
+---
+
+# Getting Started
+
+Let's build a simple API with authentication and logging. We'll go through this step by step.
+
+## Project Setup
+
+First, create a new directory and initialize your project:
+
+```bash
+mkdir my-x-app
+cd my-x-app
+pnpm init
+```
+
+## Configuration
+
+Let's start by setting up configuration. This will store our app settings and secrets:
+
+```bash
+pnpm add @xframework/x @xframework/config
+```
+
+Create `src/index.ts`:
+
+```ts
+import { createX } from "@xframework/x";
+import { ConfigAdapter } from "@xframework/config";
+
+// Define your app's configuration
+const config = {
+  port: 3000,
+  auth: {
+    secret: process.env.AUTH_SECRET || "dev-secret",
+    providers: ["github"],
+  },
+};
+
+// Create X instance with config
+const x = createX()
+  .syncAdapter("config", () => new ConfigAdapter(config))
+  .build();
+```
+
+## Adding Hono
+
+Now let's add [Hono](https://hono.dev) for routing. We'll use our config in the setup:
+
+```bash
+pnpm add @xframework/hono hono
+```
+
+Update your code:
+
+```ts
+import { Hono } from "hono";
+import { HonoAdapter } from "@xframework/hono";
+
+const app = new Hono();
+
+const x = createX()
+  .syncAdapter("config", () => new ConfigAdapter(config))
+  .syncAdapter("hono", (deps) => {
+    // Use config in Hono setup
+    app.get("/", (c) =>
+      c.json({
+        message: "Hello X Framework!",
+        env: deps.config.env,
+      }),
+    );
+    return new HonoAdapter({ hono: app });
+  })
+  .build();
+```
+
+## Adding Authentication
+
+Let's add authentication with Better Auth, using our config:
+
+```bash
+pnpm add @xframework/better-auth better-auth
+```
+
+Update your code:
+
+```ts
+import { betterAuth } from "better-auth";
+import { BetterAuthServerAdapter } from "@xframework/better-auth";
+
+const x = createX()
+  .syncAdapter("config", () => new ConfigAdapter(config))
+  .syncAdapter("auth", (deps) => {
+    // Initialize auth with config
+    const auth = betterAuth({
+      secret: deps.config.auth.secret,
+      providers: deps.config.auth.providers,
+    });
+    return new BetterAuthServerAdapter({ auth });
+  })
+  .syncAdapter("hono", (deps) => {
+    // Protected route using auth
+    app.get("/protected", async (c) => {
+      const session = await deps.auth.$context;
+      if (!session.user) return c.text("Unauthorized", 401);
+      return c.json({ message: "Welcome!" });
+    });
+    return new HonoAdapter({ hono: app });
+  })
+  .build();
+```
+
+## Adding Logging
+
+Finally, let's add logging that includes our configuration context:
+
+```bash
+pnpm add @xframework/logtape @logtape/logtape
+```
+
+Update your code one last time:
+
+```ts
+import { LogTapeAdapter } from "@xframework/logtape";
+
+const x = createX()
+  .syncAdapter("config", () => new ConfigAdapter(config))
+  .syncAdapter("auth", (deps) => {
+    const auth = betterAuth({
+      secret: deps.config.auth.secret,
+      providers: deps.config.auth.providers,
+    });
+    return new BetterAuthServerAdapter({ auth });
+  })
+  .syncAdapter("logger", (deps) => {
+    // Create logger with config context
+    return new LogTapeAdapter({
+      defaultContext: { env: deps.config.env },
+    });
+  })
+  .syncAdapter("hono", (deps) => {
+    // Log requests with auth info
+    app.use("*", async (c, next) => {
+      const session = await deps.auth.$context;
+      deps.logger.info("Request", {
+        path: c.req.path,
+        userId: session?.user?.id,
+      });
+      await next();
+    });
+    return new HonoAdapter({ hono: app });
+  })
+  .build();
+
+export default x.hono;
+```
+
+## Running the App
+
+Create a simple server in `src/server.ts`:
+
+```ts
+import app from "./index";
+import { createX } from "@xframework/x";
+
+const x = createX()
+  .syncAdapter(
+    "config",
+    () =>
+      new ConfigAdapter({
+        port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
+      }),
+  )
+  .build();
+
+// Start server using config
+Bun.serve({
+  port: x.config.port,
+  fetch: app.fetch,
+});
+
+console.log(`Server running at http://localhost:${x.config.port}`);
+```
+
+Run your app:
+
+```bash
+bun run src/server.ts
+```
+
+That's it! You've built an API with:
+
+- Type-safe configuration
+- Routing with Hono
+- Authentication with Better Auth
+- Request logging with LogTape
+- Proper dependency injection between components
+
+Next, learn more about:
+
+- [Core Concepts](/docs/core-concepts)
+- [Dependency Injection](/docs/core-concepts/dependency-injection)
+- [Examples](/docs/examples)

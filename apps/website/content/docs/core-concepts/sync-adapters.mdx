@@ -1,0 +1,59 @@
+---
+title: Sync Adapters
+description: Understanding and creating synchronous adapters in X Framework
+---
+
+# Sync Adapters
+
+Sync adapters are used for operations that can be initialized immediately, like configuration or logging.
+
+## Using Sync Adapters
+
+```ts
+import { createX } from "@xframework/x";
+import { ConfigAdapter } from "@xframework/config";
+
+const x = createX()
+  .syncAdapter("config", () => new ConfigAdapter(config))
+  .build();
+```
+
+## Writing a Sync Adapter
+
+To create your own sync adapter, extend the `SyncAdapter` class:
+
+```ts
+import { SyncAdapter } from "@xframework/x/adapter";
+
+// The type parameter is what your adapter will export
+export class MyAdapter extends SyncAdapter<{ value: string }> {
+  private value: string;
+
+  constructor(value: string) {
+    super();
+    this.value = value;
+  }
+
+  // Optional: Run initialization code
+  init() {
+    // This runs after the adapter is created
+    console.log("Initializing with:", this.value);
+  }
+
+  // Required: Export your adapter's functionality
+  export() {
+    return { value: this.value };
+  }
+}
+```
+
+## Using Your Adapter
+
+```ts
+const x = createX()
+  .syncAdapter("my-adapter", () => new MyAdapter("hello"))
+  .build();
+
+// Access your adapter's exported value
+console.log(x["my-adapter"].value); // prints: hello
+```

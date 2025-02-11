@@ -1,0 +1,118 @@
+---
+title: LogTape Adapter
+description: Add structured logging to your X Framework application
+---
+
+# LogTape Adapter
+
+The LogTape adapter provides structured logging with context support.
+
+## Installation
+
+```bash
+pnpm add @xframework/logtape @logtape/logtape
+```
+
+## Usage
+
+```ts
+import { LogTapeAdapter } from "@xframework/logtape";
+
+const x = createX()
+  .syncAdapter(
+    "logger",
+    () =>
+      new LogTapeAdapter({
+        defaultContext: { env: "production" },
+      }),
+  )
+  .build();
+
+// Use logger methods
+x.logger.info("Server started");
+x.logger.error("Database error", { code: 500 });
+x.logger.debug("Debug info", { memory: process.memoryUsage() });
+```
+
+For more details on using LogTape, see the [LogTape documentation](https://github.com/logtape/logtape).
+
+## Logging Levels
+
+LogTape supports multiple logging levels:
+
+```ts
+// Different log levels
+x.logger.debug("Debug message");
+x.logger.info("Info message");
+x.logger.warn("Warning message");
+x.logger.error("Error message");
+
+// With metadata
+x.logger.info("User action", {
+  userId: "123",
+  action: "login",
+  timestamp: new Date(),
+});
+```
+
+## Integration with Hono
+
+Example of adding request logging middleware:
+
+```ts
+const x = createX()
+  .syncAdapter("hono", () => new HonoAdapter({ hono: app }))
+  .syncAdapter("logger", () => new LogTapeAdapter())
+  .build();
+
+// Add logging middleware
+x.hono.use("*", async (c, next) => {
+  const start = Date.now();
+
+  try {
+    await next();
+
+    x.logger.info("Request completed", {
+      path: c.req.path,
+      method: c.req.method,
+      duration: Date.now() - start,
+      status: c.res.status,
+    });
+  } catch (error) {
+    x.logger.error("Request failed", {
+      path: c.req.path,
+      method: c.req.method,
+      duration: Date.now() - start,
+      error,
+    });
+    throw error;
+  }
+});
+```
+
+## Type Safety
+
+The adapter preserves LogTape's type information:
+
+```ts
+// Type-safe logging with metadata
+interface UserMetadata {
+  userId: string;
+  action: string;
+  timestamp: Date;
+}
+
+x.logger.info<UserMetadata>("User action", {
+  userId: "123",
+  action: "login",
+  timestamp: new Date(),
+});
+```
+
+## Best Practices
+
+1. Use appropriate log levels for different types of messages
+2. Include relevant context in log metadata
+3. Avoid logging sensitive information
+4. Use structured logging for better searchability
+5. Consider log rotation and retention policies

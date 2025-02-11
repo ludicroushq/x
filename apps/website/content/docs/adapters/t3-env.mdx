@@ -1,0 +1,39 @@
+---
+title: T3 Env Adapter
+description: Add environment variable validation to your X Framework application
+---
+
+# T3 Env Adapter
+
+The T3 Env adapter provides runtime environment variable validation using [@t3-oss/env-core](https://github.com/t3-oss/env-core).
+
+## Installation
+
+```bash
+pnpm add @xframework/t3-oss__env-core @t3-oss/env-core zod
+```
+
+## Usage
+
+```ts
+import { createEnv } from "@t3-oss/env-core";
+import { T3EnvAdapter } from "@xframework/t3-oss__env-core";
+import { z } from "zod";
+
+const env = createEnv({
+  server: {
+    DATABASE_URL: z.string().url(),
+    API_KEY: z.string().min(1),
+    PORT: z.string().transform(Number),
+  },
+  runtimeEnv: process.env,
+});
+
+const x = createX()
+  .syncAdapter("env", () => new T3EnvAdapter({ env }))
+  .build();
+
+// Access validated env variables
+const dbUrl = x.env.DATABASE_URL;
+const port = x.env.PORT;
+```

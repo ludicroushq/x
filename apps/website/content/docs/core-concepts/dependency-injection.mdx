@@ -1,0 +1,80 @@
+---
+title: Dependency Injection
+description: Share resources between adapters in X Framework
+---
+
+# Dependency Injection
+
+Adapters can access other adapters that were initialized before them. This is useful for sharing configuration, connections, or other resources.
+
+## Basic Usage
+
+```ts
+const x = createX()
+  .syncAdapter(
+    "config",
+    () =>
+      new ConfigAdapter({
+        apiKey: process.env.API_KEY!,
+      }),
+  )
+  .syncAdapter("stripe", (deps) => {
+    // Use config from previous adapter
+    return new StripeAdapter({
+      client: new Stripe(deps.config.apiKey),
+    });
+  })
+  .build();
+```
+
+## Async Dependencies
+
+You can mix sync and async adapters:
+
+```ts
+const x = createX()
+  .syncAdapter(
+    "config",
+    () =>
+      new ConfigAdapter({
+        dbUrl: process.env.DATABASE_URL!,
+      }),
+  )
+  .asyncAdapter("db", async (deps) => {
+    // Wait for async connection using config
+    const pool = await createPool(deps.config.dbUrl);
+    return new DrizzleAdapter(pool);
+  })
+  .syncAdapter("auth", (deps) => {
+    // Use both config and db
+    return new BetterAuthAdapter({
+      db: deps.db,
+      secret: deps.config.secret,
+    });
+  })
+  .build();
+```
+
+## Order Matters
+
+Adapters can only access other adapters that were added before them:
+
+```ts
+// ❌ This will fail
+const x = createX()
+  .syncAdapter("api", (deps) => {
+    // Error: config not available yet
+    return new ApiAdapter(deps.config);
+  })
+  .syncAdapter("config", () => new ConfigAdapter({}))
+  .build();
+
+// ✅ This works
+const x = createX()
+  .syncAdapter("config", () => new ConfigAdapter({}))
+  .syncAdapter("api", (deps) => {
+    // Config is now available
+    return new ApiAdapter(deps.config);
+  })
+  .build();
+```

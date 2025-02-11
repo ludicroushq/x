@@ -1,0 +1,22 @@
+---
+title: Composition
+description: Composing adapters in X Framework
+---
+
+# Composition
+
+X Framework allows you to compose multiple adapters together and reuse them across your application.
+
+```ts
+import { createX } from "@xframework/x";
+
+// Create base instance with common adapters
+const baseX = createX()
+  .syncAdapter("config", () => new ConfigAdapter(config))
+  .syncAdapter("logger", () => new LogTapeAdapter());
+
+// Create app instance with additional adapters
+const appX = baseX
+  .syncAdapter("hono", () => new HonoAdapter(app))
+  .syncAdapter("auth", () => new BetterAuthAdapter(auth));
+```

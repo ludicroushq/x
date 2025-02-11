@@ -1,0 +1,44 @@
+---
+title: Config Adapter
+description: Add configuration to your X Framework application
+---
+
+# Config Adapter
+
+The Config adapter provides type-safe configuration management.
+
+## Installation
+
+```bash
+pnpm add @xframework/config
+```
+
+## Usage
+
+```ts
+import { ConfigAdapter } from "@xframework/config";
+
+// Define your config type
+interface AppConfig {
+  port: number;
+  database: {
+    url: string;
+  };
+}
+
+// Create your config
+const config: AppConfig = {
+  port: 3000,
+  database: {
+    url: process.env.DATABASE_URL!,
+  },
+};
+
+const x = createX()
+  .syncAdapter("config", () => new ConfigAdapter<AppConfig>(config))
+  .build();
+
+// Access your config
+const port = x.config.port;
+const dbUrl = x.config.database.url;
+```

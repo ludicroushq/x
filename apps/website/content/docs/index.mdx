@@ -1,13 +1,43 @@
 ---
-title: Hello World
-description: Your first document
+title: Introduction
+description: Get started with X Framework - the modern Node.js framework that embraces ecosystem freedom
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+# Introduction
 
-## What is Next?
+X Framework is a modern Node.js framework designed to give you complete freedom in choosing your tech stack. Unlike traditional frameworks that force you into specific patterns or technologies, X adapts to your preferences, allowing you to use any database, authentication system, or API layer you prefer.
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.vercel.app" />
-</Cards>
+## Core Concepts
+
+X Framework is built around the concept of adapters - modular pieces that integrate your favorite tools and libraries into a cohesive application. The framework provides a simple, type-safe way to compose these adapters together.
+
+```ts
+import { createX } from "@xframework/x";
+import { HonoAdapter } from "@xframework/hono";
+import { DrizzleAdapter } from "@your-db-adapter/drizzle";
+import { StripeAdapter } from "@xframework/stripe";
+import { BetterAuthAdapter } from "@xframework/better-auth";
+import { LogTapeAdapter } from "@xframework/logtape";
+
+export const x = createX()
+  .syncAdapter("hono", () => new HonoAdapter(hono))
+  .syncAdapter("db", () => new DrizzleAdapter(drizzle))
+  .syncAdapter("stripe", () => new StripeAdapter(stripe))
+  .syncAdapter("auth", () => new BetterAuthAdapter(auth))
+  .syncAdapter("logger", () => new LogTapeAdapter(logTape));
+```
+
+## Key Features
+
+- **Ecosystem Freedom**: Use any library or tool you love - X adapts to your stack
+- **Type Safety**: Full TypeScript support with excellent type inference
+- **Modular Design**: Add only what you need through the adapter system
+- **Async/Sync Support**: Work with both synchronous and asynchronous adapters seamlessly
+- **Composable**: Easily combine multiple adapters to build your application
+
+## Next Steps
+
+- [Quick Start](/docs/quick-start)
+- [Core Concepts](/docs/core-concepts)
+- [Creating Adapters](/docs/creating-adapters)
+- [Examples](/docs/examples)

@@ -1,0 +1,3 @@
+{
+  "pages": ["sync-adapters", "async-adapters", "dependency-injection"]
+}

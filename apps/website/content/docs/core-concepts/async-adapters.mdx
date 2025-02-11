@@ -1,0 +1,66 @@
+---
+title: Async Adapters
+description: Understanding and creating asynchronous adapters in X Framework
+---
+
+# Async Adapters
+
+Async adapters are used for operations that require asynchronous initialization, like database connections.
+
+## Using Async Adapters
+
+```ts
+import { createX } from "@xframework/x";
+import { DrizzleAdapter } from "@your-db-adapter/drizzle";
+
+const x = createX()
+  .asyncAdapter("db", async () => {
+    const pool = await createPool();
+    return new DrizzleAdapter(pool);
+  })
+  .build();
+```
+
+## Writing an Async Adapter
+
+To create your own async adapter, extend the `AsyncAdapter` class:
+
+```ts
+import { AsyncAdapter } from "@xframework/x/adapter";
+
+// The type parameter is what your adapter will export
+export class MyAsyncAdapter extends AsyncAdapter<{ data: string[] }> {
+  private connection: Connection;
+
+  constructor(connection: Connection) {
+    super();
+    this.connection = connection;
+  }
+
+  // Optional: Run async initialization code
+  async init() {
+    // This runs after the adapter is created
+    await this.connection.connect();
+  }
+
+  // Required: Export your adapter's functionality
+  async export() {
+    const data = await this.connection.query("SELECT * FROM items");
+    return { data };
+  }
+}
+```
+
+## Using Your Adapter
+
+```ts
+const x = createX()
+  .asyncAdapter("my-async", async () => {
+    const conn = await createConnection();
+    return new MyAsyncAdapter(conn);
+  })
+  .build();
+
+// Access your adapter's exported value
+const data = await x["my-async"].data;
+```

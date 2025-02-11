@@ -1,0 +1,53 @@
+---
+title: Stripe Adapter
+description: Add Stripe payments to your X Framework application
+---
+
+# Stripe Adapter
+
+The Stripe adapter provides a type-safe wrapper around your Stripe client and handles webhook verification.
+
+## Installation
+
+```bash
+pnpm add @xframework/stripe stripe
+```
+
+## Usage
+
+```ts
+import Stripe from "stripe";
+import { StripeAdapter } from "@xframework/stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+const x = createX()
+  .syncAdapter(
+    "stripe",
+    () =>
+      new StripeAdapter({
+        client: stripe,
+        webhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+      }),
+  )
+  .build();
+
+// Access Stripe client
+const customer = await x.stripe.client.customers.create({
+  email: "user@example.com",
+});
+```
+
+## Webhook Handler
+
+The adapter provides a `handleWebhookRequest` method that verifies the webhook signature:
+
+```ts
+x.hono.post("/webhook", async (c) => {
+  const event = await x.stripe.handleWebhookRequest(c.req.raw);
+  // event is a verified Stripe webhook event
+  return c.text("ok");
+});
+```
+
+For more details on using Stripe, see the [Stripe documentation](https://stripe.com/docs).

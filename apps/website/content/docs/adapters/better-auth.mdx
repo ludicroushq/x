@@ -1,0 +1,55 @@
+---
+title: Better Auth Adapter
+description: Add authentication to your X Framework application
+---
+
+# Better Auth Adapter
+
+The Better Auth adapter provides server and client adapters for authentication.
+
+## Installation
+
+```bash
+pnpm add @xframework/better-auth better-auth
+```
+
+## Server Usage
+
+```ts
+import { betterAuth } from "better-auth";
+import { BetterAuthServerAdapter } from "@xframework/better-auth";
+
+const auth = betterAuth({
+  // See Better Auth docs for configuration
+});
+
+const x = createX()
+  .syncAdapter("auth", () => new BetterAuthServerAdapter({ auth }))
+  .build();
+
+// Access auth context in routes
+x.hono.get("/me", async (c) => {
+  const session = await x.auth.$context;
+  return c.json(session.user);
+});
+```
+
+## Client Usage
+
+```ts
+import { createAuthClient } from "better-auth/client";
+import { BetterAuthClientAdapter } from "@xframework/better-auth";
+
+const authClient = createAuthClient({
+  // See Better Auth docs for configuration
+});
+
+const x = createX()
+  .syncAdapter("auth", () => new BetterAuthClientAdapter({ authClient }))
+  .build();
+
+// Use auth client methods
+const session = await x.auth.getSession();
+```
+
+For more details on using Better Auth, see the [Better Auth documentation](https://github.com/better-auth/better-auth).
