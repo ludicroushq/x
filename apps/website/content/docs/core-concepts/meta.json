@@ -1,3 +1,4 @@
 {
+  "defaultOpen": true,
   "pages": ["sync-adapters", "async-adapters", "dependency-injection"]
 }

@@ -1,3 +1,4 @@
 {
+  "defaultOpen": true,
   "pages": ["hono", "better-auth", "stripe", "logtape", "config", "t3-env"]
 }

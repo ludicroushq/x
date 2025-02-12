@@ -16,7 +16,7 @@ export const baseOptions: BaseLayoutProps = {
     {
       text: "Home",
       url: "/",
-      active: "exact",
+      active: "url",
     },
     {
       text: "Documentation",
@@ -24,4 +24,5 @@ export const baseOptions: BaseLayoutProps = {
       active: "nested-url",
     },
   ],
+  githubUrl: "https://github.com/ludicroushq/x",
 };
