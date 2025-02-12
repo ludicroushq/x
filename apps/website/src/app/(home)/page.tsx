@@ -46,7 +46,6 @@ export default function HomePage() {
           <div className="mt-4 text-left">
             <DynamicCodeBlock
               lang="ts"
-              className="text-sm"
               code={`import { createX } from '@xframework/x';
 
 export const x = createX()
