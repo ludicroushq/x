@@ -53,7 +53,20 @@ export const x = createX()
   .syncAdapter('db', () => new DrizzleAdapter(drizzle))
   .syncAdapter('stripe', () => new StripeAdapter(stripe))
   .syncAdapter('auth', () => new BetterAuthAdapter(auth))
-  .syncAdapter('logger', () => new LogTapeAdapter(logTape));`}
+  .syncAdapter('logger', () => new LogTapeAdapter(logTape));
+
+// USAGE
+export async function GET(request: Request) {
+  const user = await x.auth.getUser(request);
+  x.logger.info('Fetching posts for user', { user });
+  const posts = await x.db.query.posts.findMany({
+    where: eq(posts.authorId, user.id),
+  });
+
+  return new Response(JSON.stringify({
+    posts,
+  }));
+}`}
             />
           </div>
         </div>
