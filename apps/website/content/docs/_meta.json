@@ -1,0 +1,41 @@
+{
+  "*": {
+    "type": "page"
+  },
+  "index": {
+    "title": "Introduction",
+    "theme": {
+      "breadcrumb": false,
+      "footer": true,
+      "sidebar": true,
+      "toc": true,
+      "pagination": true
+    }
+  },
+  "getting-started": "Getting Started",
+  "core-concepts": {
+    "title": "Core Concepts",
+    "children": {
+      "sync-adapters": "Sync Adapters",
+      "async-adapters": "Async Adapters",
+      "dependency-injection": "Dependency Injection"
+    }
+  },
+  "guides": {
+    "title": "Guides",
+    "children": {
+      "nextjs": "Next.js"
+    }
+  },
+  "adapters": {
+    "title": "Official Adapters",
+    "children": {
+      "hono": "Hono",
+      "better-auth": "Better Auth",
+      "stripe": "Stripe",
+      "logtape": "LogTape",
+      "config": "Config",
+      "t3-env": "T3 Env"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+---
+title: Next.js Guide
+description: Using X Framework with Next.js
+---
+
+# Next.js Guide
+
+When using X Framework with Next.js, you'll need separate instances for client and server components.
+
+## Server Instance
+
+Create `src/lib/server.ts`:
+
+```ts
+import { createX } from "@xframework/x";
+import { betterAuth } from "better-auth";
+import { BetterAuthServerAdapter } from "@xframework/better-auth";
+import { LogTapeAdapter } from "@xframework/logtape";
+
+// Server-only instance
+export const x = createX()
+  .syncAdapter(
+    "auth",
+    () =>
+      new BetterAuthServerAdapter({
+        auth: betterAuth({
+          // See Better Auth docs for config
+        }),
+      }),
+  )
+  .syncAdapter("logger", () => new LogTapeAdapter())
+  .build();
+```
+
+## Client Instance
+
+Create `src/lib/client.ts`:
+
+```ts
+import { createX } from "@xframework/x";
+import { createAuthClient } from "better-auth/client";
+import { BetterAuthClientAdapter } from "@xframework/better-auth";
+
+// Client-only instance
+export const x = createX()
+  .syncAdapter(
+    "auth",
+    () =>
+      new BetterAuthClientAdapter({
+        authClient: createAuthClient({
+          // See Better Auth docs for config
+        }),
+      }),
+  )
+  .build();
+```
+
+## Usage
+
+Server Component:
+
+```tsx
+import { x } from "@/lib/server";
+
+export default async function Page() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  return session.user ? <h1>Welcome {session.user.name}</h1> : null;
+}
+```
+
+Client Component:
+
+```tsx
+"use client";
+import { x } from "@/lib/client";
+
+export function LoginButton() {
+  return (
+    <button onClick={() => x.auth.signIn.social("github")}>
+      Login with GitHub
+    </button>
+  );
+}
+```
