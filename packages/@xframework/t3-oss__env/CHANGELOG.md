@@ -1,5 +1,12 @@
 # @xframework/t3-oss\_\_env-core
 
+## 0.4.1
+
+### Patch Changes
+
+- fe37e1d: rename package
+  - @xframework/x@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes
