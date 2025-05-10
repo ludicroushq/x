@@ -10,14 +10,14 @@ The T3 Env adapter provides runtime environment variable validation using [@t3-o
 ## Installation
 
 ```bash
-pnpm add @xframework/t3-oss__env-core @t3-oss/env-core zod
+pnpm add @xframework/t3-oss__env @t3-oss/env-core zod
 ```
 
 ## Usage
 
 ```ts
 import { createEnv } from "@t3-oss/env-core";
-import { T3EnvAdapter } from "@xframework/t3-oss__env-core";
+import { T3EnvAdapter } from "@xframework/t3-oss__env";
 import { z } from "zod";
 
 const env = createEnv({
