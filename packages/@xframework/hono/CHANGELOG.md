@@ -1,5 +1,11 @@
 # @xframework/hono
 
+## 0.4.1
+
+### Patch Changes
+
+- @xframework/x@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes
