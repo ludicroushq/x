@@ -1,5 +1,11 @@
 # @xframework/logtape
 
+## 0.4.2
+
+### Patch Changes
+
+- @xframework/x@0.4.2
+
 ## 0.4.1
 
 ### Patch Changes
