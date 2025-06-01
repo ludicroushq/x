@@ -35,7 +35,8 @@
       "stripe": "Stripe",
       "logtape": "LogTape",
       "config": "Config",
-      "t3-env": "T3 Env"
+      "t3-env": "T3 Env",
+      "drizzle-orm": "Drizzle ORM"
     }
   }
 }

@@ -1,0 +1,119 @@
+---
+title: Drizzle ORM Adapter
+description: Add type-safe database operations to your X Framework application
+---
+
+# Drizzle ORM Adapter
+
+The Drizzle ORM adapter provides a type-safe wrapper around your Drizzle database instance, allowing you to perform database operations with full TypeScript support.
+
+## Installation
+
+```bash
+pnpm add @xframework/drizzle-orm drizzle-orm
+```
+
+You'll also need a database driver. For example, for SQLite:
+
+```bash
+pnpm add better-sqlite3
+pnpm add -D @types/better-sqlite3
+```
+
+## Basic Usage
+
+First, set up your Drizzle database instance:
+
+```ts
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import Database from "better-sqlite3";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+
+// Define your schema
+export const users = sqliteTable("users", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+});
+
+// Create database connection
+const sqlite = new Database("./database.db");
+const db = drizzle(sqlite, { schema: { users } });
+```
+
+Then integrate it with X Framework:
+
+```ts
+import { createX } from "@xframework/x";
+import { DrizzleAdapter } from "@xframework/drizzle-orm";
+
+const x = createX()
+  .syncAdapter("db", () => new DrizzleAdapter({ db }))
+  .build();
+
+// Now you can use your database
+const allUsers = await x.db.select().from(users);
+```
+
+## Using with Different Databases
+
+The adapter works with any Drizzle-supported database:
+
+### PostgreSQL
+
+```ts
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+const db = drizzle(pool);
+
+const x = createX()
+  .syncAdapter("db", () => new DrizzleAdapter({ db }))
+  .build();
+```
+
+### MySQL
+
+```ts
+import { drizzle } from "drizzle-orm/mysql2";
+import mysql from "mysql2/promise";
+
+const connection = await mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  database: "mydb",
+});
+const db = drizzle(connection);
+
+const x = createX()
+  .syncAdapter("db", () => new DrizzleAdapter({ db }))
+  .build();
+```
+
+## Integration with Other Adapters
+
+The Drizzle adapter works seamlessly with other X Framework adapters:
+
+```ts
+const x = createX()
+  .syncAdapter("config", () => new ConfigAdapter(config))
+  .syncAdapter("db", (deps) => {
+    const sqlite = new Database(deps.config.databasePath);
+    const db = drizzle(sqlite, { schema });
+    return new DrizzleAdapter({ db });
+  })
+  .syncAdapter("logger", () => new LogTapeAdapter())
+  .build();
+
+// Use in your application
+x.hono.get("/users", async (c) => {
+  x.logger.info("Fetching users");
+  const users = await x.db.select().from(usersTable);
+  return c.json(users);
+});
+```
+
+For more details on using Drizzle ORM, see the [Drizzle documentation](https://orm.drizzle.team/).
