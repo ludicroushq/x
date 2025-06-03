@@ -1,5 +1,11 @@
 # @xframework/t3-oss\_\_env-core
 
+## 0.4.3
+
+### Patch Changes
+
+- @xframework/x@0.4.3
+
 ## 0.4.2
 
 ### Patch Changes
