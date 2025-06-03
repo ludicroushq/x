@@ -23,7 +23,7 @@
     "@xframework/x": "workspace:*"
   },
   "peerDependencies": {
-    "drizzle-orm": ">=0.39.1"
+    "drizzle-orm": ">=0.39.1 || >=1.0.0-0"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.8",
